@@ -1,6 +1,6 @@
 export const mockProducts = [
   {
-    id: 1,
+    id: crypto.randomUUID(),
     name: "Paracetamol 500mg",
     price: 120.0,
     stock: 150,
@@ -11,7 +11,7 @@ export const mockProducts = [
     status: "PAYED",
   },
   {
-    id: 2,
+    id: crypto.randomUUID(),
     name: "Ibuprofeno 400mg",
     price: 180.0,
     stock: 100,
@@ -22,7 +22,7 @@ export const mockProducts = [
     status: "PENDING",
   },
   {
-    id: 3,
+    id: crypto.randomUUID(),
     name: "Amoxicilina 500mg",
     price: 220.0,
     stock: 80,
@@ -33,7 +33,7 @@ export const mockProducts = [
     status: "DELIVERED",
   },
   {
-    id: 4,
+    id: crypto.randomUUID(),
     name: "Clorfenamina 4mg",
     price: 150.0,
     stock: 120,
@@ -44,7 +44,7 @@ export const mockProducts = [
     status: "PAYED",
   },
   {
-    id: 5,
+    id: crypto.randomUUID(),
     name: "Omeprazol 20mg",
     price: 200.0,
     stock: 90,
@@ -55,7 +55,7 @@ export const mockProducts = [
     status: "DELIVERED",
   },
   {
-    id: 6,
+    id: crypto.randomUUID(),
     name: "Captopril 25mg",
     price: 300.0,
     stock: 50,
@@ -66,7 +66,7 @@ export const mockProducts = [
     status: "PENDING",
   },
   {
-    id: 7,
+    id: crypto.randomUUID(),
     name: "Metformina 850mg",
     price: 250.0,
     stock: 70,
@@ -77,7 +77,7 @@ export const mockProducts = [
     status: "REJECTED",
   },
   {
-    id: 8,
+    id: crypto.randomUUID(),
     name: "Dextrometorfano 10mg",
     price: 130.0,
     stock: 110,
@@ -88,7 +88,7 @@ export const mockProducts = [
     status: "PENDING",
   },
   {
-    id: 9,
+    id: crypto.randomUUID(),
     name: "Vitaminas C 500mg",
     price: 140.0,
     stock: 140,
@@ -99,7 +99,7 @@ export const mockProducts = [
     status: "DELIVERED",
   },
   {
-    id: 10,
+    id: crypto.randomUUID(),
     name: "Loratadina 10mg",
     price: 160.0,
     stock: 130,
