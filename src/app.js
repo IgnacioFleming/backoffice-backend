@@ -1,6 +1,7 @@
 import express from "express";
 import mockProducts from "./assests/mockProducts.js";
 import cors from "cors";
+import { productSchema } from "./schemas/products.js";
 
 const app = express();
 app.use(cors());
@@ -20,14 +21,36 @@ app.delete("/api/products/:id", (req, res) => {
 });
 
 app.put("/api/products/:id", (req, res) => {
-  const { id } = req.params;
-  const { body } = req;
-  const productIndex = mockProducts.findIndex((product) => product.id.toString() === id);
-  const updatedProducts = mockProducts.map((product) => {
-    if (product.id.toString() === id) return { ...product, ...body };
-    return product;
-  });
-  res.json({ status: "success", payload: updatedProducts[productIndex] });
+  try {
+    const { id } = req.params;
+    const { body } = req;
+    const productIndex = mockProducts.findIndex((product) => product.id.toString() === id);
+    const updatedProducts = mockProducts.map((product) => {
+      if (product.id.toString() === id) {
+        const { success, data, error } = productSchema.safeParse({ ...product, ...body });
+        if (!success) throw new Error(error);
+        return data;
+      }
+      return product;
+    });
+    res.json({ status: "success", payload: updatedProducts[productIndex] });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+app.post("/api/products", (req, res) => {
+  try {
+    const { body } = req;
+    const { success, data, error } = productSchema.safeParse({ id: crypto.randomUUID(), ...body });
+
+    if (!success) return res.json({ success, error });
+    mockProducts.push(data);
+
+    res.json({ success, data });
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 
 const PORT = process.env.PORT || 8080;
