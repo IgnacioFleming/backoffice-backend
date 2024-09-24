@@ -6,9 +6,7 @@ export const mockProducts = [
     stock: 150,
     category: "analgesicos",
     description: "Alivio temporal del dolor y reducción de fiebre.",
-    costumer: "Farmacia Saludable",
     thumbnail: "https://www.farmaciasdrahorro.com.ar/wp-content/uploads/2020/11/PARACETAMOL_ISA_5___X_1__COMP_BLISTER.png",
-    status: "PAYED",
   },
   {
     id: 2,
@@ -17,9 +15,7 @@ export const mockProducts = [
     stock: 100,
     category: "analgesicos",
     description: "Anti-inflamatorio y analgésico para dolor y fiebre.",
-    costumer: "Farmacia El Buen Rato",
     thumbnail: "https://cdn.batitienda.com/baticloud/images/product_picture_192413d922ca429481afba035f99ebfa_637651443890508057_0_m.jpg",
-    status: "PENDING",
   },
   {
     id: 3,
@@ -28,9 +24,7 @@ export const mockProducts = [
     stock: 80,
     category: "antibioticos",
     description: "Antibiótico para infecciones bacterianas.",
-    costumer: "Antibioticos SRL",
     thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2C6S1uQoG7MV3DBOaxP3blNw0GO3ur3y-yA&s",
-    status: "DELIVERED",
   },
   {
     id: 4,
@@ -39,9 +33,7 @@ export const mockProducts = [
     stock: 120,
     category: "antihistamínicos",
     description: "Tratamiento para alergias y rinitis alérgica.",
-    costumer: "Farmacia Alergia",
     thumbnail: "https://www.laboratoriochile.cl/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2015/09/Clorfenamina_4MG_20C_BE_HD.jpg.webp",
-    status: "PAYED",
   },
   {
     id: 5,
@@ -50,9 +42,7 @@ export const mockProducts = [
     stock: 90,
     category: "antiacidos",
     description: "Inhibidor de la bomba de protones para el tratamiento de acidez.",
-    costumer: "Digestivo Plus",
     thumbnail: "https://www.farmaciasdrahorro.com.ar/wp-content/uploads/2020/11/TREG_2__MG_X_15_CAPS.png",
-    status: "DELIVERED",
   },
   {
     id: 6,
@@ -61,9 +51,7 @@ export const mockProducts = [
     stock: 50,
     category: "antihipertensivos",
     description: "Medicamento para el tratamiento de la hipertensión arterial.",
-    costumer: "CardioMed",
     thumbnail: "https://milab.cl/wp-content/uploads/2022/07/CAPTOPRIL-25mg-COM-30-BE-RARA-WEB.jpg",
-    status: "PENDING",
   },
   {
     id: 7,
@@ -72,9 +60,7 @@ export const mockProducts = [
     stock: 70,
     category: "antidiabeticos",
     description: "Medicamento para el control de la glucosa en sangre en diabetes tipo 2.",
-    costumer: "Diabetes Control",
     thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLAvyzAbReDsuPu8eWQGJU6Mx0GV52FlJHlg&s",
-    status: "REJECTED",
   },
   {
     id: 8,
@@ -83,9 +69,7 @@ export const mockProducts = [
     stock: 110,
     category: "antitusigenos",
     description: "Supresor de la tos para alivio de tos seca.",
-    costumer: "Farmacia Respiro",
     thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK1ecosOPLekyfjI7aLtWYK8KkajVeyWAusQ&s",
-    status: "PENDING",
   },
   {
     id: 9,
@@ -94,9 +78,7 @@ export const mockProducts = [
     stock: 140,
     category: "vitaminas",
     description: "Suplemento vitamínico para fortalecer el sistema inmunológico.",
-    costumer: "Vitamínicos y Más",
     thumbnail: "https://farmaonline.vtexassets.com/arquivos/ids/1233103-800-800?v=638534800863930000&width=800&height=800&aspect=true",
-    status: "DELIVERED",
   },
   {
     id: 10,
@@ -105,9 +87,7 @@ export const mockProducts = [
     stock: 130,
     category: "antihistamínicos",
     description: "Antihistamínico para tratamiento de alergias y urticaria.",
-    costumer: "Farmacia Sin Alergias",
     thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGDbvCdPTuOJxyuS-4mzQo-VmAJn2FsN6nVA&s",
-    status: "PAYED",
   },
 ];
 
