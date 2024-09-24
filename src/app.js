@@ -3,13 +3,13 @@ import mockProducts from "./assests/mockProducts.js";
 import cors from "cors";
 import { productSchema } from "./schemas/products.js";
 
+const products = mockProducts;
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.get("/api/products", (req, res) => {
-  const products = mockProducts;
-
   res.json({ status: "success", payload: products });
 });
 
@@ -45,9 +45,9 @@ app.post("/api/products", (req, res) => {
     const { success, data, error } = productSchema.safeParse({ id: crypto.randomUUID(), ...body });
 
     if (!success) return res.json({ success, error });
-    mockProducts.push(data);
+    products.push(data);
 
-    res.json({ success, data });
+    res.json({ status: "success", payload: data });
   } catch (error) {
     throw new Error(error);
   }
