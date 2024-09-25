@@ -24,18 +24,18 @@ const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const { body } = req;
-    const productIndex = mockProducts.findIndex((product) => product.id.toString() === id);
-    const updatedProducts = mockProducts.map((product) => {
+    const productIndex = products.findIndex((product) => product.id.toString() === id);
+    const updatedProducts = products.map((product) => {
       if (product.id.toString() === id) {
         const { success, data, error } = productSchema.safeParse({ ...product, ...body });
-        if (!success) throw new Error(error);
+        if (!success) throw res.json({ status: "error", error });
         return data;
       }
       return product;
     });
     res.json({ status: "success", payload: updatedProducts[productIndex] });
   } catch (error) {
-    throw new Error(error);
+    console.log("Exception throwed");
   }
 };
 
