@@ -27,6 +27,11 @@ const updateCostumer = async (req, res) => {
   }
 };
 
-const deleteCostumer = async (req, res) => {};
+const deleteCostumer = async (req, res) => {
+  const { id } = req.params;
+  const costumerIndex = costumers.findIndex((e) => e.id.toString() === id);
+  const result = costumers.splice(costumerIndex, 1);
+  res.json({ status: "success", payload: result });
+};
 
 export default { getCostumers, createCostumer, updateCostumer, deleteCostumer };

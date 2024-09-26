@@ -16,7 +16,7 @@ const createProduct = async (req, res) => {
 
     res.json({ status: "success", payload: data });
   } catch (error) {
-    throw new Error(error);
+    console.log("Exception throwed", error);
   }
 };
 
@@ -35,7 +35,7 @@ const updateProduct = async (req, res) => {
     });
     res.json({ status: "success", payload: updatedProducts[productIndex] });
   } catch (error) {
-    console.log("Exception throwed");
+    console.log("Exception throwed", error);
   }
 };
 
