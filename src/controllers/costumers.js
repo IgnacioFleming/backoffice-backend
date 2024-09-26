@@ -6,7 +6,14 @@ const getCostumers = async (req, res) => {
   res.json({ status: "success", payload: costumers });
 };
 
-const createCostumer = async (req, res) => {};
+const createCostumer = async (req, res) => {
+  const { body } = req;
+  body.id = costumers[costumers.length - 1].id + 1;
+  const { success, data, error } = costumerSchema.safeParse(body);
+  if (!success) return res.json({ status: "error", error });
+  costumers.push(data);
+  res.json({ status: "success", payload: data });
+};
 
 const updateCostumer = async (req, res) => {
   try {
