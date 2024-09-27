@@ -9,7 +9,8 @@ const getProducts = async (req, res) => {
 const createProduct = async (req, res) => {
   try {
     const { body } = req;
-    const { success, data, error } = productSchema.safeParse({ id: crypto.randomUUID(), ...body });
+    body.id = products[products.length - 1].id + 1;
+    const { success, data, error } = productSchema.safeParse(body);
 
     if (!success) return res.json({ success, error });
     products.push(data);
