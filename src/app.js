@@ -3,6 +3,8 @@ import cors from "cors";
 import { productsRouter } from "./routes/products.js";
 import { costumerRouter } from "./routes/costumers.js";
 import { corsOptions } from "./utils/cors.js";
+import { pool } from "./config/dbconfig.js";
+
 const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());

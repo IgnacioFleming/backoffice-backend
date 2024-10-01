@@ -1,6 +1,5 @@
-import dotenv from "dotenv";
-dotenv.config();
-const whitelist = [process.env.LOCAL_CLIENT_URL, process.env.DEVELOP_CLIENT_URL];
+import config from "../config/config.js";
+const whitelist = [config.urls.local_client_url, config.urls.develop_client_url];
 export const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
