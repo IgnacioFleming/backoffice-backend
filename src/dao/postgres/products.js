@@ -1,4 +1,4 @@
-import { pool } from "../../config/dbconfig.js";
+import { pool } from "../../config/dbconfig-pg.js";
 import { productSchema } from "../../schemas/products.js";
 export default class ProductsManager {
   static async getAll() {

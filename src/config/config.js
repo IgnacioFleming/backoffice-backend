@@ -8,10 +8,19 @@ export default {
     develop_client_url: process.env.DEVELOP_CLIENT_URL,
   },
   db: {
-    user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
-    host: process.env.PGHOST,
-    port: process.env.PGHPORT,
-    database: process.env.PGDATABASE,
+    pg: {
+      user: process.env.PGUSER,
+      password: process.env.PGPASSWORD,
+      host: process.env.PGHOST,
+      port: process.env.PGPORT,
+      database: process.env.PGDATABASE,
+    },
+    mysql: {
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+      host: process.env.MYSQL_HOST,
+      port: process.env.MYSQL_PORT,
+      database: process.env.MYSQL_DATABASE,
+    },
   },
 };
