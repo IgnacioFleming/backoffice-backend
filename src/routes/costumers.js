@@ -9,3 +9,4 @@ costumerRouter.post("/", costumersController.createCostumer);
 costumerRouter.put("/:id", costumersController.updateCostumer);
 
 costumerRouter.delete("/:id", costumersController.deleteCostumer);
+costumerRouter.post("/mocks", costumersController.createMockedCostumers);

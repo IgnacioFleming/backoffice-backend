@@ -5,9 +5,9 @@ types.setTypeParser(1700, (val) => {
   return val === null ? null : parseFloat(val);
 });
 export const pool = new Pool({
-  user: config.db.user,
-  password: config.db.password,
-  host: config.db.host,
-  port: config.db.port,
-  database: config.db.database,
+  user: config.db.pg.user,
+  password: config.db.pg.password,
+  host: config.db.pg.host,
+  port: config.db.pg.port,
+  database: config.db.pg.database,
 });
