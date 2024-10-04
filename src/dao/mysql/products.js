@@ -21,14 +21,17 @@ export default class ProductsManager {
   }
   static async delete(id) {
     await pool.execute("DELETE FROM products WHERE id =?", [id]);
-    const deletedProduct = await this.getById(id);
-    return deletedProduct;
+    return { status: "success" };
   }
   static async create(body) {
     const { success, data, error } = productSchema.safeParse({ id: 1, ...body });
     if (!success) return { error };
-    const [result] = await pool.query("INSERT INTO products (name, price, stock, category, description, thumbnail) VALUES(?,?,?,?,?,?)", [data.name, data.price, data.stock, data.category, data.description, data.thumbnail]);
-    const product = await this.getById(result.insertId);
-    return product;
+    if (error) {
+      console.log(error);
+      console.log(error.issues[0].path);
+    }
+    await pool.query("INSERT INTO products (name, price, stock, category, description, thumbnail) VALUES(?,?,?,?,?,?)", [data.name, data.price, data.stock, data.category, data.description, data.thumbnail]);
+
+    return { status: "success" };
   }
 }

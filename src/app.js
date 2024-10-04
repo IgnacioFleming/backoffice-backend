@@ -6,6 +6,7 @@ import { corsOptions } from "./utils/cors.js";
 
 const app = express();
 app.use(cors(corsOptions));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/products", productsRouter);
 app.use("/api/costumers", costumerRouter);

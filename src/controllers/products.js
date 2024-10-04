@@ -1,4 +1,5 @@
 import ProductsManager from "../dao/mysql/products.js";
+import { generateMockedProducts } from "../mocks/products.js";
 
 const getProducts = async (req, res) => {
   const products = await ProductsManager.getAll();
@@ -10,7 +11,7 @@ const createProduct = async (req, res) => {
     const { body } = req;
     const newProduct = await ProductsManager.create(body);
     if (newProduct?.error) return res.json({ status: "error", error });
-    res.json({ status: "success", payload: newProduct });
+    res.json({ status: "success", payload: newProduct.status });
   } catch (error) {
     console.log("Exception throwed", error);
   }
@@ -30,8 +31,17 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
-  const deteteProduct = await ProductsManager.delete(id);
-  res.json({ status: "success", payload: deleteProduct });
+  const deleteProduct = await ProductsManager.delete(id);
+  res.json({ status: "success", payload: deleteProduct.status });
 };
 
-export default { getProducts, createProduct, updateProduct, deleteProduct };
+const createMockedProducts = async (req, res) => {
+  const { quantity } = req.query;
+  const mockedProducts = await generateMockedProducts(quantity);
+  mockedProducts.forEach(async (product) => {
+    await ProductsManager.create(product);
+  });
+  res.json({ status: "success", payload: "Products created" });
+};
+
+export default { getProducts, createProduct, updateProduct, deleteProduct, createMockedProducts };

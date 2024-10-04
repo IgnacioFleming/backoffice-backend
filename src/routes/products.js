@@ -10,3 +10,7 @@ productsRouter.post("/", productsController.createProduct);
 productsRouter.put("/:id", productsController.updateProduct);
 
 productsRouter.delete("/:id", productsController.deleteProduct);
+
+//mocks
+
+productsRouter.post("/mocks", productsController.createMockedProducts);
