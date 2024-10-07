@@ -1,5 +1,5 @@
 import { pool } from "../../config/dbconfig-mysql.js";
-import { costumerSchema } from "../../schemas/costumers.js";
+import { costumerSchema } from "../../schemas/costumer.js";
 export default class CostumersManager {
   static async getAll() {
     const [costumers] = await pool.query("SELECT * FROM costumers ORDER BY id ASC");

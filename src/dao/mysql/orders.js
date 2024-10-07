@@ -1,5 +1,5 @@
 import { pool } from "../../config/dbconfig-mysql.js";
-import { orderSchema } from "../../schemas/orders.js";
+import { orderSchema } from "../../schemas/order.js";
 export default class OrdersManager {
   static async getAll() {
     const [orders] = await pool.query("SELECT orders.id ,orders.order_number, products.name, products.price, orders.quantity, orders.amount, products.category FROM orders INNER JOIN products ON orders.product_id = products.id ORDER BY orders.id ASC");
@@ -10,6 +10,12 @@ export default class OrdersManager {
     const [[order]] = await pool.execute("SELECT * FROM orders WHERE id = ?", [id]);
     return order;
   }
+
+  static async getByOrderNumber(order_number) {
+    const [orders] = await pool.execute("SELECT * FROM orders WHERE order_number = ?", [order_number]);
+    return orders;
+  }
+
   static async update(id, body) {
     const order = await this.getById(id);
     const updatedOrder = { ...order, ...body };
