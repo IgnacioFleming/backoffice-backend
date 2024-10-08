@@ -1,10 +1,11 @@
 import { pool } from "../config/dbconfig-mysql.js";
 import OrdersManager from "../dao/mysql/orders.js";
+import SalesManager from "../dao/mysql/sales.js";
 import { generateMockedOrders } from "../mocks/orders.js";
 
 const getAll = async (req, res) => {
-  const orders = await OrdersManager.getAll();
-  res.json({ status: "success", payload: orders });
+  const sales = await SalesManager.getAll();
+  res.json({ status: "success", payload: sales });
 };
 const getById = async (req, res) => {
   try {
@@ -50,12 +51,6 @@ const deleteOrder = async (req, res) => {
     res.status(500).send({ status: "error", error });
   }
 };
-const getOrdersByOrderNumber = async (req, res) => {
-  const { order_number } = req.params;
-  const orders = await OrdersManager.getByOrderNumber(order_number);
-  res.json({ status: "success", payload: orders });
-};
-
 const createMockedOrders = async (req, res) => {
   const { quantity } = req.query;
   const mockedOrders = await generateMockedOrders(quantity);
@@ -75,5 +70,4 @@ export default {
   update,
   deleteOrder,
   createMockedOrders,
-  getOrdersByOrderNumber,
 };

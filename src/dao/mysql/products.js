@@ -1,5 +1,5 @@
 import { pool } from "../../config/dbconfig-mysql.js";
-import { productSchema } from "../../schemas/products.js";
+import { productSchema } from "../../schemas/product.js";
 export default class ProductsManager {
   static async getAll() {
     const [products] = await pool.query("SELECT * FROM products ORDER BY id ASC");
