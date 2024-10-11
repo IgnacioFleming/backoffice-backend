@@ -12,7 +12,7 @@ export default class OrdersManager {
   }
 
   static async getByOrderNumber(order_number) {
-    const [orders] = await pool.execute("SELECT * FROM orders WHERE order_number = ?", [order_number]);
+    const [orders] = await pool.execute("SELECT orders.id ,orders.order_number, products.name, products.price, orders.quantity, orders.amount, products.category FROM orders INNER JOIN products ON orders.product_id = products.id WHERE orders.order_number = ? ORDER BY orders.id ASC", [order_number]);
     return orders;
   }
 
