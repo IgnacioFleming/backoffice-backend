@@ -1,5 +1,6 @@
 import { pool } from "../../config/dbconfig-mysql.js";
 import { orderSchema } from "../../schemas/order.js";
+import { saleSchema } from "../../schemas/sale.js";
 export default class SalesManager {
   static async getAll() {
     const [sales] = await pool.query("SELECT * from sales INNER JOIN costumers ON sales.costumer_id = costumers.id");
@@ -23,14 +24,17 @@ export default class SalesManager {
     await pool.execute("DELETE FROM orders WHERE id =?", [id]);
     return { status: "success" };
   }
-  static async create(body) {
-    const { success, data, error } = orderSchema.safeParse({ id: 1, ...body });
+  static async create({ costumer_id, items_quantity, total_amount, products }) {
+    const newSale = { id: 1, order_number: 1, costumer_id, items_quantity, total_amount, is_payed: false, is_delivered: false };
+    const { success, data, error } = saleSchema.safeParse(newSale);
+    console.log(success);
+    console.log(products);
     if (!success) return { error };
     if (error) {
       console.log(error);
       console.log(error.issues[0].path);
     }
-    await pool.query("INSERT INTO orders (order_number, product_id, quantity, amount) VALUES(?,?,?,?)", [data.order_number, data.product_id, data.quantity, data.amount]);
+    // await pool.query("INSERT INTO orders (order_number, product_id, quantity, amount) VALUES(?,?,?,?)", [data.order_number, data.product_id, data.quantity, data.amount]);
 
     return { status: "success" };
   }
