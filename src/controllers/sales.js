@@ -21,7 +21,7 @@ const getById = async (req, res) => {
 const create = async (req, res) => {
   try {
     const { body } = req;
-    const newOrder = await OrdersManager.create(body);
+    const newOrder = await SalesManager.create(body);
     if (newOrder?.error) return res.status(400).send({ status: "error", error: newOrder.error });
     res.json({ status: "success", payload: newOrder.status });
   } catch (error) {
