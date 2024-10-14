@@ -41,12 +41,13 @@ const update = async (req, res) => {
     res.status(500).send({ status: "error", error });
   }
 };
-const deleteOrder = async (req, res) => {
+const deleteSale = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleteOrder = await OrdersManager.delete(id);
-    if (deleteOrder?.error) return res.status(400).send({ status: "error", error: deleteOrder.error });
-    res.json({ status: "success", payload: deleteOrder.status });
+    const deleteSale = await SalesManager.delete(id);
+    console.log(deleteSale);
+    if (deleteSale?.error) return res.status(400).send({ status: "error", error: deleteSale.error });
+    res.json({ status: "success", payload: deleteSale.message });
   } catch (error) {
     res.status(500).send({ status: "error", error });
   }
@@ -68,6 +69,6 @@ export default {
   getById,
   create,
   update,
-  deleteOrder,
+  deleteSale,
   createMockedOrders,
 };

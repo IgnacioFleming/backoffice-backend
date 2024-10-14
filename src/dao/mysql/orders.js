@@ -17,13 +17,26 @@ export default class OrdersManager {
   }
 
   static async update(id, body) {
-    const order = await this.getById(id);
-    const updatedOrder = { ...order, ...body };
-    if (!order) return { error: "The id provided does not correspond to any existing order" };
-    const { success, data, error } = orderSchema.safeParse(updatedOrder);
-    if (!success) return { error };
-    await pool.execute("UPDATE orders SET order_number=?, product_id=? , quantity=?, amount=?  WHERE id=?", [data.order_number, data.product_id, data.quantity, data.amount, id]);
-    return updatedOrder;
+    let connection;
+    try {
+      const order = await this.getById(id);
+      const updatedOrder = { ...order, ...body };
+      console.log(updatedOrder);
+      if (!order) return { error: "The id provided does not correspond to any existing order" };
+      const { success, data, error } = orderSchema.safeParse(updatedOrder);
+      if (!success) return { error };
+      connection = await pool.getConnection();
+      await connection.beginTransaction();
+      await connection.execute("UPDATE orders SET order_number=?, product_id=? , quantity=?, amount=((SELECT price from products where id = ?)*?)  WHERE id=?", [data.order_number, data.product_id, data.quantity, data.product_id, data.quantity, id]);
+      await connection.execute("UPDATE sales SET items_quantity = (SELECT SUM(quantity) FROM orders WHERE order_number = ? ), total_amount= (SELECT SUM(amount) FROM orders WHERE order_number = ?) WHERE id = ?", [data.order_number, data.order_number, data.order_number]);
+      connection.commit();
+      return updatedOrder;
+    } catch (error) {
+      if (connection) connection.rollback();
+      return { status: "error", message: error };
+    } finally {
+      if (connection) connection.release();
+    }
   }
   static async delete(id) {
     await pool.execute("DELETE FROM orders WHERE id =?", [id]);
