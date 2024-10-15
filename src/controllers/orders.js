@@ -31,9 +31,7 @@ const update = async (req, res) => {
   try {
     const { id } = req.params;
     const { body } = req;
-    console.log(body);
     const updateOrder = await OrdersManager.update(id, body);
-    console.log(updateOrder);
     if (updateOrder?.error) return res.status(400).send({ status: "error", error: updateOrder.error });
     res.json({ status: "success", payload: updateOrder });
   } catch (error) {
