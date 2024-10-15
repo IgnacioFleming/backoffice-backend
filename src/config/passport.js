@@ -1,7 +1,12 @@
 import passport from "passport";
 import local from "passport-local";
+import { userSchema } from "../schemas/user.js";
+import { userRoles } from "../utils/roles.js";
+import UsersManager from "../dao/mysql/users.js";
+import config from "./config.js";
+import { createHash, isValidPassword } from "../utils/utils.js";
 
-export const strategyName = {
+export const strategies = {
   REGISTER: "register",
   LOGIN: "login",
   RESTORE_PASSWORD: "restore_password",
@@ -10,53 +15,51 @@ export const strategyName = {
 const LocalStrategy = local.Strategy;
 const initializePassport = () => {
   passport.use(
-    strategyName.REGISTER,
+    strategies.REGISTER,
     new LocalStrategy({ passReqToCallback: true, session: true }, async (req, username, password, done) => {
       try {
-        let data = req.body;
-        const user = await userService.getOne({ email: username });
-        if (user.payload) {
-          return done(null, false);
+        const { body } = req;
+        const hashedPassword = await createHash(password);
+        const { success, data, error } = userSchema.safeParse({ ...body, id: 1, role: userRoles.READER, is_enabled: false, password: hashedPassword });
+        if (!success) return done(error);
+        const newUser = await UsersManager.create(data);
+
+        if (newUser.status === "success") {
+          return done(null, newUser.payload);
+        } else {
+          return done(null, false, { message: newUser.error });
         }
-        data.password = await createHash(password);
-        data.role = data.role || "usuario";
-        data.last_connection = Date();
-        const newCart = await cartsService.createCart();
-        data.cart = newCart.payload._id;
-        const result = await userService.create(data);
-        return done(null, result.payload);
       } catch (error) {
         return done(error);
       }
     })
   );
 
-  // passport.use(
-  //   "login",
-  //   new LocalStrategy({ usernameField: "email" }, async (username, password, done) => {
-  //     try {
-  //       if (username === config.passport.admin_user && password === config.passport.admin_password) {
-  //         const user = {
-  //           email: username,
-  //           status: "active",
-  //           role: "admin",
-  //           first_name: "Admin_User",
-  //           _id: new ObjectId(),
-  //         };
-  //         return done(null, user);
-  //       }
-  //       const user = await userService.getOne({ email: username });
-  //       if (!user.payload) return done(null, false, { message: "No se encontró el usuario" });
-  //       const validation = await isValidPassword(password, user.payload);
-
-  //       if (!validation) return done(null, false, { message: "Contraseña invalida" });
-  //       const last_connection = await userService.update({ email: username }, { $set: { last_connection: Date() } });
-  //       return done(null, user.payload);
-  //     } catch (error) {
-  //       done(error);
-  //     }
-  //   })
-  // );
+  passport.use(
+    strategies.LOGIN,
+    new LocalStrategy(async (username, password, done) => {
+      try {
+        if (username === config.admin_keys.admin_username && password === config.admin_keys.admin_pwd) {
+          const user = {
+            username: config.admin_keys.admin_user,
+            first_name: "Usuario Administrador",
+            last_name: "",
+            email: "",
+            role: userRoles.SUPER_ADMIN,
+            is_enabled: true,
+          };
+          return done(null, user);
+        }
+        const user = await UsersManager.getByUsername(username);
+        if (!user.payload) return done(null, false, { message: "User not found." });
+        const validation = await isValidPassword(password, user.payload);
+        if (!validation) return done(null, false, { message: "Invalid password." });
+        return done(null, user.payload);
+      } catch (error) {
+        done(error);
+      }
+    })
+  );
 
   // passport.use(
   //   "restorePass",
