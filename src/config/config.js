@@ -23,4 +23,8 @@ export default {
       database: process.env.MYSQL_DATABASE,
     },
   },
+  admin_keys: {
+    admin_user: process.env.ADMIN_USER,
+    admin_pwd: process.env.ADMIN_PASSWORD,
+  },
 };
