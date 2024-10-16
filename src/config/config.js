@@ -27,4 +27,8 @@ export default {
     admin_username: process.env.ADMIN_USERNAME,
     admin_pwd: process.env.ADMIN_PASSWORD,
   },
+  email_service: {
+    user: process.env.EMAIL_SERVICE_USER,
+    password: process.env.EMAIL_SERVICE_PASSWORD,
+  },
 };
