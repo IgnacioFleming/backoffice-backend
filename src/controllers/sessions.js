@@ -1,6 +1,6 @@
 import UserDto from "../dao/dto/user.js";
 import sendEmail from "../services/email/index.js";
-import { emailTemplates } from "../services/email/templates/registerEmail.js";
+import { emailTemplates } from "../services/email/templates/index.js";
 
 const registerUser = async (req, res) => {
   const user = new UserDto(req.user);

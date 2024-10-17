@@ -1,4 +1,4 @@
-const registerEmailTemplate = (username) => {
+export const registerEmailTemplate = (username) => {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -171,4 +171,3 @@ const registerEmailTemplate = (username) => {
 </html>
 `;
 };
-export const emailTemplates = { registerEmailTemplate };
