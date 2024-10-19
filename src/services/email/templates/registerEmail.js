@@ -28,7 +28,7 @@ export const registerEmailTemplate = (username) => {
                       <tbody>
                         <tr>
                           <td class="m_8537046614505610192wi-100p" align="center" style="overflow: hidden">
-                            <img src="https://res.cloudinary.com/dah7yxmc5/image/upload/v1729110345/Business-manager/salud-ciencia-medica-elegante_1419-2183_srdzsm.jpg" width="600" style="border: none; width: 600px; font: 700 16px/20px Arial, Helvetica, sans-serif; color: #000; vertical-align: top; height: auto" alt="" class="CToWUd" data-bit="iit" />
+                            <img src="https://res.cloudinary.com/dah7yxmc5/image/upload/v1729167487/Business-manager/salud-ciencia-medica-elegante_1419-2183_srdzsm_fghvmf.webp" width="600" style="border: none; width: 600px; font: 700 16px/20px Arial, Helvetica, sans-serif; color: #000; vertical-align: top; height: auto" alt="" class="CToWUd" data-bit="iit" />
                           </td>
                         </tr>
                         <tr>

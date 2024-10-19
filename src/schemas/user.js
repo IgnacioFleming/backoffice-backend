@@ -5,6 +5,7 @@ export const userSchema = z.object({
   id: z.number().int().positive(),
   username: z.string().min(3).max(30),
   password: z.string().min(3).max(100),
+  email: z.string().email().min(5).max(100),
   first_name: z.string().min(1).max(63),
   last_name: z.string().min(1).max(63),
   role: z.enum(Object.values(userRoles)),
