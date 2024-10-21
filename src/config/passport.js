@@ -16,9 +16,10 @@ const LocalStrategy = local.Strategy;
 const initializePassport = () => {
   passport.use(
     strategies.REGISTER,
-    new LocalStrategy({ passReqToCallback: true, session: true }, async (req, username, password, done) => {
+    new LocalStrategy({ passReqToCallback: true, session: false }, async (req, username, password, done) => {
       try {
         const { body } = req;
+        console.log(req.body);
         const hashedPassword = await createHash(password);
         const { success, data, error } = userSchema.safeParse({ ...body, id: 1, role: userRoles.READER, is_enabled: false, password: hashedPassword });
         if (!success) return done(error);
@@ -50,10 +51,12 @@ const initializePassport = () => {
           };
           return done(null, user);
         }
+
         const user = await UsersManager.getByUsername(username);
         if (!user.payload) return done(null, false, { message: "User not found." });
         const validation = await isValidPassword(password, user.payload);
         if (!validation) return done(null, false, { message: "Invalid password." });
+        if (user.payload.is_enabled !== 1) return done(null, false, { message: "This User is not enabled yet." });
         return done(null, user.payload);
       } catch (error) {
         done(error);
