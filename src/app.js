@@ -7,9 +7,12 @@ import { orderRouter } from "./routes/orders.js";
 import { saleRouter } from "./routes/sales.js";
 import { sessionRouter } from "./routes/sessions.js";
 import initializePassport from "./config/passport.js";
+import session from "express-session";
+import config from "./config/config.js";
 
 const app = express();
 app.use(cors(corsOptions));
+app.use(session({ secret: config.session.secret, cookie: { maxAge: 3600 * 1000 * 6 }, resave: false, saveUninitialized: false }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 initializePassport();
