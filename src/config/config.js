@@ -31,4 +31,7 @@ export default {
     user: process.env.EMAIL_SERVICE_USER,
     password: process.env.EMAIL_SERVICE_PASSWORD,
   },
+  session: {
+    secret: process.env.SESSION_SECRET,
+  },
 };

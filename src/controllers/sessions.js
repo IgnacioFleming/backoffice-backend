@@ -13,6 +13,7 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
+  console.log(req.session);
   const user = new UserDto(req.user);
   res.send({ status: "success", payload: user });
 };
