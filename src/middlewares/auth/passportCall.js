@@ -1,8 +1,10 @@
 import passport from "passport";
 export const passportCall = (strategy) => {
   return async (req, res, next) => {
-    passport.authenticate(strategy, { session: false }, (err, user, info) => {
-      console.log(info);
+    console.log(strategy);
+    console.log(typeof strategy);
+    passport.authenticate(strategy, { session: true }, (err, user, info) => {
+      console.log(user);
       if (err) {
         return next(err);
       }
@@ -11,6 +13,13 @@ export const passportCall = (strategy) => {
         return res.send({ status: "error", message: info?.message });
       }
       req.user = user;
+      req.session.passport = { user: { id: user.id } };
+      req.isAuthenticated = () => req.session.passport.user && true;
+      req.signOut = async () => {
+        delete req.session.passport;
+        delete req.user;
+        return;
+      };
       next();
     })(req, res, next);
   };

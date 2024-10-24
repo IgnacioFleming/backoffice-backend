@@ -3,7 +3,6 @@ import sendEmail from "../services/email/index.js";
 import { emailTemplates } from "../services/email/templates/index.js";
 
 const registerUser = async (req, res) => {
-  console.log(req.user);
   const user = new UserDto(req.user);
   const destinationEmail = user.email;
   const subject = "¡Bienvenido a Business Manager!";
@@ -13,12 +12,17 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  console.log(req.session);
   const user = new UserDto(req.user);
   res.send({ status: "success", payload: user });
+};
+
+const logOutUser = async (req, res) => {
+  req.session.destroy();
+  res.json({ status: "success", payload: "Logged out." });
 };
 
 export default {
   registerUser,
   loginUser,
+  logOutUser,
 };

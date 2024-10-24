@@ -1,6 +1,8 @@
 import { Router } from "express";
 import ordersController from "../controllers/orders.js";
+import { auth } from "../middlewares/auth/auth.js";
 export const orderRouter = Router();
+orderRouter.use(auth);
 orderRouter.get("/", ordersController.getAll);
 orderRouter.get("/:id", ordersController.getById);
 orderRouter.get("/order_number/:order_number", ordersController.getOrdersByOrderNumber);
