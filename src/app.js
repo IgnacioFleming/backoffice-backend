@@ -9,12 +9,16 @@ import { sessionRouter } from "./routes/sessions.js";
 import initializePassport from "./config/passport.js";
 import session from "express-session";
 import config from "./config/config.js";
+import passport from "passport";
+import { sessionStore } from "./config/sessionsStorage.js";
 
 const app = express();
 app.use(cors(corsOptions));
-app.use(session({ secret: config.session.secret, cookie: { maxAge: 3600 * 1000 * 6 }, resave: false, saveUninitialized: false }));
+app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 1000 * 60 * 60 }, resave: true, saveUninitialized: false }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(passport.initialize());
+app.use(passport.session());
 initializePassport();
 app.use("/api/products", productsRouter);
 app.use("/api/costumers", costumerRouter);

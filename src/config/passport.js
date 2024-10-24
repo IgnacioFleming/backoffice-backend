@@ -10,16 +10,16 @@ export const strategies = {
   REGISTER: "register",
   LOGIN: "login",
   RESTORE_PASSWORD: "restore_password",
+  AUTH: "auth",
 };
 
 const LocalStrategy = local.Strategy;
 const initializePassport = () => {
   passport.use(
     strategies.REGISTER,
-    new LocalStrategy({ passReqToCallback: true, session: false }, async (req, username, password, done) => {
+    new LocalStrategy({ passReqToCallback: true, session: true }, async (req, username, password, done) => {
       try {
         const { body } = req;
-        console.log(req.body);
         const hashedPassword = await createHash(password);
         const { success, data, error } = userSchema.safeParse({ ...body, id: 1, role: userRoles.READER, is_enabled: false, password: hashedPassword });
         if (!success) return done(error);
@@ -64,6 +64,8 @@ const initializePassport = () => {
     })
   );
 
+  // passport.use(strategies.PROTECTED_URL,new LocalStrategy())
+
   // passport.use(
   //   "restorePass",
   //   new JWTStrategy(
@@ -81,13 +83,13 @@ const initializePassport = () => {
   //   )
   // );
 
-  // passport.serializeUser((user, done) => {
-  //   done(null, user._id);
-  // });
-  // passport.deserializeUser(async (id, done) => {
-  //   const user = await userService.getById(id);
-  //   done(null, user.payload);
-  // });
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+  passport.deserializeUser(async (id, done) => {
+    const user = await UsersManager.getById(id);
+    done(null, user.payload);
+  });
 };
 
 export default initializePassport;

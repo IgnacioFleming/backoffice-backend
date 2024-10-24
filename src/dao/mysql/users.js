@@ -28,4 +28,14 @@ export default class UsersManager {
       return { status: "error", error };
     }
   }
+
+  static async getById({ id }) {
+    try {
+      const [[user]] = await pool.execute("SELECT * FROM users WHERE id = ?", [id]);
+      if (!user) return { status: "error", error: "User does not exist." };
+      return { status: "success", payload: user };
+    } catch (error) {
+      return { status: "error", error };
+    }
+  }
 }

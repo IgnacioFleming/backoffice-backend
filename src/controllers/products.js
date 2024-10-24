@@ -22,7 +22,6 @@ const updateProduct = async (req, res) => {
     const { id } = req.params;
     const { body } = req;
     const updateProduct = await ProductsManager.update(id, body);
-    console.log(updateProduct);
     res.json({ status: "success", payload: updateProduct });
   } catch (error) {
     console.log("Exception throwed", error);
