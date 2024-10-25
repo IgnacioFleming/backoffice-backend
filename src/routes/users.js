@@ -7,3 +7,4 @@ import { userRoles } from "../utils/roles.js";
 export const usersRouter = Router();
 
 usersRouter.get("/", auth, authorizationPolicy(userRoles.SUPER_ADMIN), usersController.getAll);
+usersRouter.post("/:id/handleState", auth, authorizationPolicy(userRoles.SUPER_ADMIN), usersController.handleUserState);
