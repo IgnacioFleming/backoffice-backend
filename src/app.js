@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { productsRouter } from "./routes/products.js";
 import { costumerRouter } from "./routes/costumers.js";
-import { corsOptions } from "./utils/cors.js";
+import { corsOptions } from "./config/cors.js";
 import { orderRouter } from "./routes/orders.js";
 import { saleRouter } from "./routes/sales.js";
 import { sessionRouter } from "./routes/sessions.js";
@@ -11,6 +11,9 @@ import session from "express-session";
 import config from "./config/config.js";
 import passport from "passport";
 import { sessionStore } from "./config/sessionsStorage.js";
+import { balancesRouter } from "./routes/balances.js";
+import { movementsRouter } from "./routes/movements.js";
+import { usersRouter } from "./routes/users.js";
 
 const app = express();
 app.use(cors(corsOptions));
@@ -25,6 +28,9 @@ app.use("/api/costumers", costumerRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/sales", saleRouter);
 app.use("/api/sessions", sessionRouter);
+app.use("/api/balances", balancesRouter);
+app.use("/api/movements", movementsRouter);
+app.use("/api/users", usersRouter);
 
 const PORT = process.env.PORT || 8080;
 
