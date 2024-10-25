@@ -21,8 +21,13 @@ const logOutUser = async (req, res) => {
   res.json({ status: "success", payload: "Logged out." });
 };
 
+const checkSession = async (req, res) => {
+  res.json({ status: "success", payload: "You are logged in." });
+};
+
 export default {
   registerUser,
   loginUser,
   logOutUser,
+  checkSession,
 };

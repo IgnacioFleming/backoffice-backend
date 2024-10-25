@@ -26,6 +26,7 @@ export default {
   admin_keys: {
     admin_username: process.env.ADMIN_USERNAME,
     admin_pwd: process.env.ADMIN_PASSWORD,
+    admin_id: process.env.ADMIN_ID,
   },
   email_service: {
     user: process.env.EMAIL_SERVICE_USER,

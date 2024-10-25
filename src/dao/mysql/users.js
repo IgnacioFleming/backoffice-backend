@@ -19,6 +19,15 @@ export default class UsersManager {
     }
   }
 
+  static async get() {
+    try {
+      const [users] = await pool.query("SELECT * FROM users;");
+      return { status: "success", payload: users };
+    } catch (error) {
+      return { status: "error", error };
+    }
+  }
+
   static async getByUsername(username) {
     try {
       const [[user]] = await pool.execute("SELECT * FROM users WHERE username = ?", [username]);
@@ -29,7 +38,7 @@ export default class UsersManager {
     }
   }
 
-  static async getById({ id }) {
+  static async getById(id) {
     try {
       const [[user]] = await pool.execute("SELECT * FROM users WHERE id = ?", [id]);
       if (!user) return { status: "error", error: "User does not exist." };

@@ -13,6 +13,16 @@ export const strategies = {
   AUTH: "auth",
 };
 
+const adminUser = {
+  id: config.admin_keys.admin_id,
+  username: config.admin_keys.admin_user,
+  first_name: "Usuario Administrador",
+  last_name: "",
+  email: "",
+  role: userRoles.SUPER_ADMIN,
+  is_enabled: true,
+};
+
 const LocalStrategy = local.Strategy;
 const initializePassport = () => {
   passport.use(
@@ -41,15 +51,8 @@ const initializePassport = () => {
     new LocalStrategy(async (username, password, done) => {
       try {
         if (username === config.admin_keys.admin_username && password === config.admin_keys.admin_pwd) {
-          const user = {
-            username: config.admin_keys.admin_user,
-            first_name: "Usuario Administrador",
-            last_name: "",
-            email: "",
-            role: userRoles.SUPER_ADMIN,
-            is_enabled: true,
-          };
-          return done(null, user);
+          console.log(adminUser);
+          return done(null, adminUser);
         }
 
         const user = await UsersManager.getByUsername(username);
@@ -84,9 +87,12 @@ const initializePassport = () => {
   // );
 
   passport.serializeUser((user, done) => {
+    console.log("serializo");
+    console.log(user.id);
     done(null, user.id);
   });
-  passport.deserializeUser(async (id, done) => {
+  passport.deserializeUser(async ({ id }, done) => {
+    if (id === adminUser.id) return done(null, adminUser);
     const user = await UsersManager.getById(id);
     done(null, user.payload);
   });

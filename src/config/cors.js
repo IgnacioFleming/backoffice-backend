@@ -1,4 +1,4 @@
-import config from "../config/config.js";
+import config from "./config.js";
 const whitelist = [config.urls.local_client_url, config.urls.develop_client_url, undefined];
 export const corsOptions = {
   origin: function (origin, callback) {
