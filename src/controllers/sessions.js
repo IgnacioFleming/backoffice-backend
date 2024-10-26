@@ -22,7 +22,8 @@ const logOutUser = async (req, res) => {
 };
 
 const checkSession = async (req, res) => {
-  res.json({ status: "success", payload: "You are logged in." });
+  const user = new UserDto(req.user);
+  res.json({ status: "success", payload: user, message: "You are logged in." });
 };
 
 export default {

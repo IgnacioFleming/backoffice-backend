@@ -17,7 +17,7 @@ import { usersRouter } from "./routes/users.js";
 
 const app = express();
 app.use(cors(corsOptions));
-app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 1000 * 60 * 60 }, resave: true, saveUninitialized: false }));
+app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000 }, resave: true, saveUninitialized: false }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());
