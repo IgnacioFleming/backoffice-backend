@@ -47,4 +47,18 @@ export default class UsersManager {
       return { status: "error", error };
     }
   }
+  static async handleUserState(id) {
+    let connection;
+    try {
+      connection = await pool.getConnection();
+      const [[{ is_enabled }]] = await connection.execute("SELECT is_enabled FROM users WHERE id = ?", [id]);
+      const newState = is_enabled === 0 ? 1 : 0;
+      const [state] = await connection.execute("UPDATE users SET is_enabled = ? WHERE id = ?;", [newState, id]);
+      return { status: "success", payload: state };
+    } catch (error) {
+      return { status: "error", error };
+    } finally {
+      if (connection) connection.release();
+    }
+  }
 }

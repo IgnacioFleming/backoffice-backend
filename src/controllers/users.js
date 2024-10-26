@@ -6,4 +6,9 @@ const getAll = async (req, res) => {
   res.json({ status, payload });
 };
 
-export default { getAll };
+const handleUserState = async (req, res) => {
+  const { id } = req.params;
+  const { status, payload } = await UsersManager.handleUserState(id);
+  res.json({ status, payload });
+};
+export default { getAll, handleUserState };
