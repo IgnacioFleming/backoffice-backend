@@ -8,6 +8,9 @@ export const productsRouter = Router();
 productsRouter.use(auth);
 
 productsRouter.get("/", productsController.getProducts);
+
+productsRouter.get("/:id", productsController.getProductById);
+
 productsRouter.post("/", productsController.createProduct);
 
 productsRouter.put("/:id", productsController.updateProduct);

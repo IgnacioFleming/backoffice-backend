@@ -6,6 +6,11 @@ const getProducts = async (req, res) => {
   res.json({ status: "success", payload: products });
 };
 
+const getProductById = async (req, res) => {
+  const { id } = req.params;
+  const product = await ProductsManager.getById(id);
+  res.json({ status: "success", payload: product });
+};
 const createProduct = async (req, res) => {
   try {
     const { body } = req;
@@ -43,4 +48,4 @@ const createMockedProducts = async (req, res) => {
   res.json({ status: "success", payload: "Products created" });
 };
 
-export default { getProducts, createProduct, updateProduct, deleteProduct, createMockedProducts };
+export default { getProducts, createProduct, updateProduct, deleteProduct, createMockedProducts, getProductById };
