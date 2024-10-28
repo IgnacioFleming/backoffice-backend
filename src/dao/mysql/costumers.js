@@ -18,7 +18,6 @@ export default class CostumersManager {
       const { success, data, error } = costumerSchema.safeParse(updatedCostumer);
       if (!success) return { error };
       await pool.execute("UPDATE costumers SET name=?, account_number=? , logo=?  WHERE id=?", [data.name, data.account_number, data.logo, id]);
-      console.log(updatedCostumer);
       return updatedCostumer;
     } catch (error) {
       console.log(error);

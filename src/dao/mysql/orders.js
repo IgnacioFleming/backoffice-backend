@@ -21,7 +21,6 @@ export default class OrdersManager {
     try {
       const order = await this.getById(id);
       const updatedOrder = { ...order, ...body };
-      console.log(updatedOrder);
       if (!order) return { error: "The id provided does not correspond to any existing order" };
       const { success, data, error } = orderSchema.safeParse(updatedOrder);
       if (!success) return { error };
@@ -46,7 +45,6 @@ export default class OrdersManager {
     const { success, data, error } = orderSchema.safeParse({ id: 1, ...body });
     if (!success) return { error };
     if (error) {
-      console.log(error);
       console.log(error.issues[0].path);
     }
     await pool.query("INSERT INTO orders (order_number, product_id, quantity, amount) VALUES(?,?,?,?)", [data.order_number, data.product_id, data.quantity, data.amount]);

@@ -14,8 +14,11 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
   try {
     const { body } = req;
+    body.price = parseFloat(body.price);
+    body.stock = parseInt(body.stock);
+    body.thumbnail = req.fileURL;
     const newProduct = await ProductsManager.create(body);
-    if (newProduct?.error) return res.json({ status: "error", error });
+    if (newProduct?.error) return res.json({ status: "error", error: newProduct.error });
     res.json({ status: "success", payload: newProduct.status });
   } catch (error) {
     console.log("Exception throwed", error);
