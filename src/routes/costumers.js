@@ -1,12 +1,13 @@
 import { Router } from "express";
 import costumersController from "../controllers/costumers.js";
 import { auth } from "../middlewares/auth/auth.js";
+import { uploadMiddleware } from "../middlewares/upload/uploader.js";
 
 export const costumerRouter = Router();
 
 costumerRouter.use(auth);
 costumerRouter.get("/", costumersController.getCostumers);
-costumerRouter.post("/", costumersController.createCostumer);
+costumerRouter.post("/", uploadMiddleware, costumersController.createCostumer);
 
 costumerRouter.put("/:id", costumersController.updateCostumer);
 

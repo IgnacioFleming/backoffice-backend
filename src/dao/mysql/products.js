@@ -26,10 +26,7 @@ export default class ProductsManager {
   static async create(body) {
     const { success, data, error } = productSchema.safeParse({ id: 1, ...body });
     if (!success) return { error };
-    if (error) {
-      console.log(error);
-      console.log(error.issues[0].path);
-    }
+    if (error) return { status: "error", error: error.issues[0].path };
     await pool.query("INSERT INTO products (name, price, stock, category, description, thumbnail) VALUES(?,?,?,?,?,?)", [data.name, data.price, data.stock, data.category, data.description, data.thumbnail]);
 
     return { status: "success" };

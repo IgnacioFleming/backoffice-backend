@@ -39,7 +39,6 @@ export default class SalesManager {
       const { success, data, error } = saleSchema.safeParse(saleData);
       if (!success) return { error };
       if (error) {
-        console.log(error);
         console.log(error.issues[0].path);
       }
       connection = await pool.getConnection();
