@@ -2,7 +2,7 @@ import { pool } from "../../config/dbconfig-mysql.js";
 import { productSchema } from "../../schemas/product.js";
 export default class ProductsManager {
   static async getAll() {
-    const [products] = await pool.query("SELECT * FROM products ORDER BY id ASC");
+    const [products] = await pool.query("SELECT * FROM products where deleted_at is null ORDER BY id ASC;");
     return products;
   }
 
@@ -20,7 +20,7 @@ export default class ProductsManager {
     return updatedProduct;
   }
   static async delete(id) {
-    await pool.execute("DELETE FROM products WHERE id =?", [id]);
+    await pool.execute("UPDATE products SET deleted_at = current_timestamp WHERE id =?", [id]);
     return { status: "success" };
   }
   static async create(body) {
