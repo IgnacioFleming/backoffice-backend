@@ -14,7 +14,6 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
   try {
     const { body } = req;
-    console.log(body);
     body.price = parseFloat(body.price);
     body.stock = parseInt(body.stock);
     body.thumbnail = req.fileURL || body.thumbnail;

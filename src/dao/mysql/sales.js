@@ -10,15 +10,7 @@ export default class SalesManager {
     const [[sale]] = await pool.execute("SELECT * FROM sales WHERE id = ?", [id]);
     return sale;
   }
-  //   static async update(id, body) {
-  //     const sale = await this.getById(id);
-  //     const updatedOrder = { ...order, ...body };
-  //     if (!order) return { error: "The id provided does not correspond to any existing order" };
-  //     const { success, data, error } = orderSchema.safeParse(updatedOrder);
-  //     if (!success) return { error };
-  //     await pool.execute("UPDATE orders SET order_number=?, product_id=? , quantity=?, amount=?  WHERE id=?", [data.order_number, data.product_id, data.quantity, data.amount, id]);
-  //     return updatedOrder;
-  //   }
+
   static async delete(id) {
     let connection;
     try {
@@ -35,7 +27,7 @@ export default class SalesManager {
   static async create({ costumer_id, items_quantity, total_amount, products }) {
     let connection;
     try {
-      const saleData = { id: 1, order_number: 1, costumer_id, items_quantity, total_amount, is_payed: false, is_delivered: false };
+      const saleData = { id: 1, sale_id: 1, costumer_id, items_quantity, total_amount, is_payed: false, is_delivered: false };
       const { success, data, error } = saleSchema.safeParse(saleData);
       if (!success) return { error };
       if (error) {
@@ -48,7 +40,7 @@ export default class SalesManager {
 
       await Promise.all(
         products.map(async (product) => {
-          await connection.execute("INSERT INTO orders (order_number, product_id, quantity, amount) VALUES(?,?,?,?)", [saleId, product.id, product.quantity, product.amount]);
+          await connection.execute("INSERT INTO orders (sale_id, product_id, quantity, amount) VALUES(?,?,?,?)", [saleId, product.id, product.quantity, product.amount]);
         })
       );
 

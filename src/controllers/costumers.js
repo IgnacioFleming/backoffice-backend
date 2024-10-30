@@ -10,7 +10,7 @@ const createCostumer = async (req, res) => {
   try {
     const { body } = req;
     body.account_number = parseInt(body.account_number);
-    body.logo = req.fileURL;
+    body.logo = req.fileURL || body.logo;
     const newCostumer = await CostumersManager.create(body);
     if (newCostumer?.error) return res.status(400).send({ status: "error", error: newCostumer.error });
 

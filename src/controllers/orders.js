@@ -49,8 +49,8 @@ const deleteOrder = async (req, res) => {
   }
 };
 const getOrdersByOrderNumber = async (req, res) => {
-  const { order_number } = req.params;
-  const orders = await OrdersManager.getByOrderNumber(order_number);
+  const { sale_id } = req.params;
+  const orders = await OrdersManager.getByOrderNumber(sale_id);
   res.json({ status: "success", payload: orders });
 };
 
