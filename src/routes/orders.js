@@ -5,7 +5,7 @@ export const orderRouter = Router();
 orderRouter.use(auth);
 orderRouter.get("/", ordersController.getAll);
 orderRouter.get("/:id", ordersController.getById);
-orderRouter.get("/order_number/:order_number", ordersController.getOrdersByOrderNumber);
+orderRouter.get("/sale_id/:sale_id", ordersController.getOrdersByOrderNumber);
 orderRouter.post("/", ordersController.create);
 orderRouter.post("/mocks", ordersController.createMockedOrders);
 orderRouter.put("/:id", ordersController.update);

@@ -2,7 +2,7 @@ import { pool } from "../../config/dbconfig-mysql.js";
 import { productSchema } from "../../schemas/product.js";
 export default class ProductsManager {
   static async getAll() {
-    const [products] = await pool.query("SELECT * FROM products where deleted_at is null ORDER BY id ASC;");
+    const [products] = await pool.query("SELECT * FROM products where deleted_at IS NULL ORDER BY id ASC;");
     return products;
   }
 

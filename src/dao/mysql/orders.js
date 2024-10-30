@@ -2,7 +2,7 @@ import { pool } from "../../config/dbconfig-mysql.js";
 import { orderSchema } from "../../schemas/order.js";
 export default class OrdersManager {
   static async getAll() {
-    const [orders] = await pool.query("SELECT orders.id ,orders.order_number, products.name, products.price, orders.quantity, orders.amount, products.category FROM orders INNER JOIN products ON orders.product_id = products.id ORDER BY orders.id ASC");
+    const [orders] = await pool.query("SELECT orders.id ,orders.sale_id, products.name, products.price, orders.quantity, orders.amount, products.category FROM orders INNER JOIN products ON orders.product_id = products.id ORDER BY orders.id ASC");
     return orders;
   }
 
@@ -11,8 +11,8 @@ export default class OrdersManager {
     return order;
   }
 
-  static async getByOrderNumber(order_number) {
-    const [orders] = await pool.execute("SELECT orders.id ,orders.order_number, products.name, products.price, orders.quantity, orders.amount, products.category FROM orders INNER JOIN products ON orders.product_id = products.id WHERE orders.order_number = ? ORDER BY orders.id ASC", [order_number]);
+  static async getByOrderNumber(sale_id) {
+    const [orders] = await pool.execute("SELECT orders.id ,orders.sale_id, products.name, products.price, orders.quantity, orders.amount, products.category FROM orders INNER JOIN products ON orders.product_id = products.id WHERE orders.sale_id = ? ORDER BY orders.id ASC", [sale_id]);
     return orders;
   }
 
@@ -26,8 +26,8 @@ export default class OrdersManager {
       if (!success) return { error };
       connection = await pool.getConnection();
       await connection.beginTransaction();
-      await connection.execute("UPDATE orders SET order_number=?, product_id=? , quantity=?, amount=((SELECT price from products where id = ?)*?)  WHERE id=?", [data.order_number, data.product_id, data.quantity, data.product_id, data.quantity, id]);
-      await connection.execute("UPDATE sales SET items_quantity = (SELECT SUM(quantity) FROM orders WHERE order_number = ? ), total_amount= (SELECT SUM(amount) FROM orders WHERE order_number = ?) WHERE id = ?", [data.order_number, data.order_number, data.order_number]);
+      await connection.execute("UPDATE orders SET sale_id=?, product_id=? , quantity=?, amount=((SELECT price from products where id = ?)*?)  WHERE id=?", [data.sale_id, data.product_id, data.quantity, data.product_id, data.quantity, id]);
+      await connection.execute("UPDATE sales SET items_quantity = (SELECT SUM(quantity) FROM orders WHERE sale_id = ? ), total_amount= (SELECT SUM(amount) FROM orders WHERE sale_id = ?) WHERE id = ?", [data.sale_id, data.sale_id, data.sale_id]);
       connection.commit();
       return updatedOrder;
     } catch (error) {
@@ -47,7 +47,7 @@ export default class OrdersManager {
     if (error) {
       console.log(error.issues[0].path);
     }
-    await pool.query("INSERT INTO orders (order_number, product_id, quantity, amount) VALUES(?,?,?,?)", [data.order_number, data.product_id, data.quantity, data.amount]);
+    await pool.query("INSERT INTO orders (sale_id, product_id, quantity, amount) VALUES(?,?,?,?)", [data.sale_id, data.product_id, data.quantity, data.amount]);
 
     return { status: "success" };
   }
