@@ -51,7 +51,6 @@ const initializePassport = () => {
     new LocalStrategy(async (username, password, done) => {
       try {
         if (username === config.admin_keys.admin_username && password === config.admin_keys.admin_pwd) {
-          console.log(adminUser);
           return done(null, adminUser);
         }
 
@@ -87,8 +86,6 @@ const initializePassport = () => {
   // );
 
   passport.serializeUser((user, done) => {
-    console.log("serializo");
-    console.log(user.id);
     done(null, user.id);
   });
   passport.deserializeUser(async ({ id }, done) => {

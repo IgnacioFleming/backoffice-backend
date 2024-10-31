@@ -24,6 +24,9 @@ const updateCostumer = async (req, res) => {
   try {
     const { id } = req.params;
     const { body } = req;
+    req.fileURL && (body.logo = req.fileURL);
+    req.imgPublicId && (body.logo_public_id = req.imgPublicId);
+
     const updateCostumer = await CostumersManager.update(id, body);
     if (updateCostumer?.error) return res.status(400).send({ status: "error", error: updateCostumer.error });
     res.json({ status: "success", payload: updateCostumer });

@@ -17,7 +17,7 @@ export default class CostumersManager {
       if (!costumer) return { error: "The id provided does not correspond to any existing costumer" };
       const { success, data, error } = costumerSchema.safeParse(updatedCostumer);
       if (!success) return { error };
-      await pool.execute("UPDATE costumers SET name=?, account_number=? , logo=?  WHERE id=?", [data.name, data.account_number, data.logo, id]);
+      await pool.execute("UPDATE costumers SET name=?, account_number=? , logo=? , logo_public_id=?  WHERE id=?", [data.name, data.account_number, data.logo, data.logo_public_id, id]);
       return updatedCostumer;
     } catch (error) {
       console.log(error);
@@ -32,10 +32,17 @@ export default class CostumersManager {
     try {
       const { success, data, error } = costumerSchema.safeParse({ id: 1, ...body });
       if (!success) return { error };
-      await pool.execute("INSERT INTO costumers (name, account_number, logo) VALUES(?,?,?);", [data.name, data.account_number, data.logo]);
+      await pool.execute("INSERT INTO costumers (name, account_number, logo,logo_public_id) VALUES(?,?,?,?);", [data.name, data.account_number, data.logo, data.logo_public_id]);
       return { status: "success" };
     } catch (error) {
       return { error };
     }
+  }
+
+  static async getImgPublicIdById(id) {
+    try {
+      const [[{ logo_public_id }]] = await pool.execute("SELECT logo_public_id FROM costumers WHERE id = ?", [id]);
+      return logo_public_id;
+    } catch (error) {}
   }
 }
