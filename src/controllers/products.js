@@ -17,6 +17,7 @@ const createProduct = async (req, res) => {
     body.price = parseFloat(body.price);
     body.stock = parseInt(body.stock);
     body.thumbnail = req.fileURL || body.thumbnail;
+    req.imgPublicId && (body.thumbnail_public_id = req.imgPublicId);
     const newProduct = await ProductsManager.create(body);
     if (newProduct?.error) return res.json({ status: "error", error: newProduct.error });
     res.json({ status: "success", payload: newProduct.status });
@@ -29,6 +30,10 @@ const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const { body } = req;
+    body.price = parseFloat(body.price);
+    body.stock = parseInt(body.stock);
+    req.fileURL && (body.thumbnail = req.fileURL);
+    req.imgPublicId && (body.thumbnail_public_id = req.imgPublicId);
     const updateProduct = await ProductsManager.update(id, body);
     res.json({ status: "success", payload: updateProduct });
   } catch (error) {
