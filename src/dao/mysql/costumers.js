@@ -32,7 +32,8 @@ export default class CostumersManager {
     try {
       const { success, data, error } = costumerSchema.safeParse({ id: 1, ...body });
       if (!success) return { error };
-      await pool.execute("INSERT INTO costumers (name, account_number, logo,logo_public_id) VALUES(?,?,?,?);", [data.name, data.account_number, data.logo, data.logo_public_id]);
+      console.log(data);
+      await pool.execute("INSERT INTO costumers (name, account_number, logo, logo_public_id) VALUES(?,?,?,?);", [data.name, data.account_number, data.logo, data.logo_public_id]);
       return { status: "success" };
     } catch (error) {
       return { error };
