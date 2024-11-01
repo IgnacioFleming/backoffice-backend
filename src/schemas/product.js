@@ -10,3 +10,5 @@ export const productSchema = z.object({
   thumbnail: z.string().url(),
   thumbnail_public_id: z.string(),
 });
+
+export const productSchemaOptional = productSchema.partial({ thumbnail_public_id: true });

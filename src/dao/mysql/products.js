@@ -1,5 +1,5 @@
 import { pool } from "../../config/dbconfig-mysql.js";
-import { productSchema } from "../../schemas/product.js";
+import { productSchema, productSchemaOptional } from "../../schemas/product.js";
 export default class ProductsManager {
   static async getAll() {
     const [products] = await pool.query("SELECT * FROM products where deleted_at IS NULL ORDER BY id ASC;");
@@ -14,9 +14,12 @@ export default class ProductsManager {
     const product = await this.getById(id);
     if (!product) return { error: "The id provided does not correspond to any existing product" };
     const updatedProduct = { ...product, ...body };
-    const { success, data, error } = productSchema.safeParse(updatedProduct);
+    delete updatedProduct.thumbnail_public_id;
+    console.log(updatedProduct);
+    const { success, data, error } = productSchemaOptional.safeParse(updatedProduct);
+
     if (!success) return { error };
-    await pool.execute("UPDATE products SET name=?, price=? , stock=?, category=?, description=?, thumbnail=?, thumbnail_public_id=?  WHERE id=?", [data.name, data.price, data.stock, data.category, data.description, data.thumbnail, data.thumbnail_public_id, id]);
+    await pool.execute("UPDATE products SET name=?, price=? , stock=?, category=?, description=?, thumbnail=?, thumbnail_public_id=?  WHERE id=?", [data.name, data.price, data.stock, data.category, data.description, data.thumbnail, data.thumbnail_public_id || null, id]);
     return updatedProduct;
   }
   static async delete(id) {

@@ -67,6 +67,7 @@ export const uploadMiddleware = ({ deletePrevImg = false, resource } = {}) => {
           if (err) return res.status(500).json({ status: "error", error: err });
           req.fileURL = cloudinary.url(result.public_id, imgUrlOptionns);
           req.imgPublicId = result.public_id;
+          console.log(req.imgPublicId, "desde el uploader");
           next();
         });
 
