@@ -1,4 +1,5 @@
 import { pool } from "../../config/dbconfig-mysql.js";
+import { statusTypes } from "../../utils/responses.js";
 import CostumersManager from "./costumers.js";
 
 export default class MovementsManager {
@@ -18,9 +19,11 @@ export default class MovementsManager {
         ORDER BY date ASC;`,
         [id, id]
       );
+
       const costumer = await CostumersManager.getById(id);
+      if (!costumer) return { status: statusTypes.ERROR, error: "The costumer provided does not exist." };
       const balance = movements.reduce((acc, { amount }) => acc + amount, 0);
-      return { status: "success", payload: { costumer, movements, balance } };
+      return { payload: { costumer, movements, balance } };
     } catch (error) {
       console.log(error);
       return { status: "error", error };

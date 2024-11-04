@@ -2,8 +2,12 @@ import { pool } from "../../config/dbconfig-mysql.js";
 import { saleSchema } from "../../schemas/sale.js";
 export default class SalesManager {
   static async getAll() {
-    const [sales] = await pool.query("SELECT sales.id as salesId , sales.*, costumers.* from sales INNER JOIN costumers ON sales.costumer_id = costumers.id");
-    return sales;
+    try {
+      const [sales] = await pool.query("SELECT sales.id as salesId , sales.*, costumers.* from sales INNER JOIN costumers ON sales.costumer_id = costumers.id");
+      return { payload: sales };
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async getById(id) {

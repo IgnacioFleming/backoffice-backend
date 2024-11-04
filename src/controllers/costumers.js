@@ -1,60 +1,58 @@
 import CostumersManager from "../dao/mysql/costumers.js";
 import { generateMockedCostumers } from "../mocks/costumers.js";
+import { costumerOptionalSchema, costumerSchema } from "../schemas/costumer.js";
+import controllerHandlers from "../utils/controllerHandlers.js";
+import responses from "../utils/responses.js";
 
 const getCostumers = async (req, res) => {
-  const costumers = await CostumersManager.getAll();
-  res.json({ status: "success", payload: costumers });
+  const payload = await controllerHandlers.getResources(CostumersManager, res);
+  responses.successResponse(res, payload);
 };
 
 const createCostumer = async (req, res) => {
   try {
-    const { body } = req;
-    body.account_number = parseInt(body.account_number);
-    req.fileURL && (body.logo = req.fileURL);
-    req.imgPublicId && (body.logo_public_id = req.imgPublicId);
-    const newCostumer = await CostumersManager.create(body);
-    if (newCostumer?.error) return res.status(400).send({ status: "error", error: newCostumer.error });
-
-    res.json({ status: "success", payload: newCostumer.status });
+    const body = controllerHandlers.costumersBodyHandler(req);
+    const payload = await controllerHandlers.validateBody(req, res, body, costumerSchema);
+    responses.successResponse(res, payload);
   } catch (error) {
-    res.status(500).send({ status: "error", error });
+    return responses.serverErrorResponse(res, error);
   }
 };
 
 const updateCostumer = async (req, res) => {
   try {
     const { id } = req.params;
-    const { body } = req;
-    req.fileURL && (body.logo = req.fileURL);
-    req.imgPublicId && (body.logo_public_id = req.imgPublicId);
-
-    const updateCostumer = await CostumersManager.update(id, body);
-    if (updateCostumer?.error) return res.status(400).send({ status: "error", error: updateCostumer.error });
-    res.json({ status: "success", payload: updateCostumer });
+    const body = controllerHandlers.costumersBodyHandler(req);
+    const costumer = await CostumersManager.getById(id);
+    if (!costumer) return responses.clientErrorResponse(res, "Costumer does not exist.");
+    const updatedCostumer = { ...costumer, ...body };
+    updatedCostumer.logo_public_id ?? delete updatedCostumer.logo_public_id;
+    const payload = await controllerHandlers.validateBody(req, res, body, costumerOptionalSchema);
+    responses.successResponse(res, payload);
   } catch (error) {
-    res.status(500).send({ status: "error", error });
+    return responses.serverErrorResponse(res, error);
   }
 };
 
 const deleteCostumer = async (req, res) => {
   try {
     const { id } = req.params;
-
-    const deleteCostumer = await CostumersManager.delete(id);
-    if (deleteCostumer?.error) return res.status(400).send({ status: "error", error: deleteCostumer.error });
-    res.json({ status: "success", payload: deleteCostumer.status });
+    const payload = await CostumersManager.delete(id);
+    responses.successResponse(res, payload);
   } catch (error) {
-    res.status(500).send({ status: "error", error });
+    return responses.serverErrorResponse(res, error);
   }
 };
 
 const createMockedCostumers = async (req, res) => {
-  const { quantity } = req.query;
-  const mockedCostumers = await generateMockedCostumers(quantity);
-  mockedCostumers.forEach(async (costumer) => {
-    await CostumersManager.create(costumer);
-  });
-  res.json({ status: "success", payload: "Costumers created" });
+  try {
+    const { quantity } = req.query;
+    const mockedCostumers = await generateMockedCostumers(quantity);
+    mockedCostumers.forEach(async (costumer) => {
+      await CostumersManager.create(costumer);
+    });
+    responses.successResponse(res, "Mocked costumers created.");
+  } catch (error) {}
 };
 
 export default { getCostumers, createCostumer, updateCostumer, deleteCostumer, createMockedCostumers };

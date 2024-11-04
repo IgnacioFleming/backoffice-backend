@@ -2,8 +2,12 @@ import { pool } from "../../config/dbconfig-mysql.js";
 import { orderSchema } from "../../schemas/order.js";
 export default class OrdersManager {
   static async getAll() {
-    const [orders] = await pool.query("SELECT orders.id ,orders.sale_id, products.name, products.price, orders.quantity, orders.amount, products.category FROM orders INNER JOIN products ON orders.product_id = products.id ORDER BY orders.id ASC");
-    return orders;
+    try {
+      const [orders] = await pool.query("SELECT orders.id ,orders.sale_id, products.name, products.price, orders.quantity, orders.amount, products.category FROM orders INNER JOIN products ON orders.product_id = products.id ORDER BY orders.id ASC");
+      return { payload: orders };
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async getById(id) {

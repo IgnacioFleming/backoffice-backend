@@ -1,9 +1,10 @@
 import UsersManager from "../dao/mysql/users.js";
+import controllerHandlers from "../utils/controllerHandlers.js";
+import responses from "../utils/responses.js";
 
 const getAll = async (req, res) => {
-  const { status, error, payload } = await UsersManager.get();
-  if (status === "error") return res.status(400).json({ status, error });
-  res.json({ status, payload });
+  const payload = await controllerHandlers.getResources(UsersManager, res);
+  responses.successResponse(res, payload);
 };
 
 const handleUserState = async (req, res) => {
