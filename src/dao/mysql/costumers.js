@@ -1,42 +1,45 @@
 import { pool } from "../../config/dbconfig-mysql.js";
-import { costumerSchema } from "../../schemas/costumer.js";
+import { statusTypes } from "../../utils/responses.js";
 export default class CostumersManager {
   static async getAll() {
-    const [costumers] = await pool.query("SELECT * FROM costumers WHERE deleted_at IS NULL ORDER BY id ASC");
-    return costumers;
+    try {
+      const [costumers] = await pool.query("SELECT * FROM costumers WHERE deleted_at IS NULL ORDER BY id ASC");
+      return { payload: costumers };
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async getById(id) {
-    const [[costumer]] = await pool.execute("SELECT * FROM costumers WHERE id = ?", [id]);
-    return costumer;
-  }
-  static async update(id, body) {
     try {
-      const costumer = await this.getById(id);
-      const updatedCostumer = { ...costumer, ...body };
-      if (!costumer) return { error: "The id provided does not correspond to any existing costumer" };
-      const { success, data, error } = costumerSchema.safeParse(updatedCostumer);
-      if (!success) return { error };
-      await pool.execute("UPDATE costumers SET name=?, account_number=? , logo=? , logo_public_id=?  WHERE id=?", [data.name, data.account_number, data.logo, data.logo_public_id, id]);
-      return updatedCostumer;
+      const [[costumer]] = await pool.execute("SELECT * FROM costumers WHERE id = ?", [id]);
+      return { payload: costumer };
     } catch (error) {
-      console.log(error);
+      throw error;
+    }
+  }
+  static async update(id, data) {
+    try {
+      await pool.execute("UPDATE costumers SET name=?, account_number=? , logo=? , logo_public_id=?  WHERE id=?", [data.name, data.account_number, data.logo, data.logo_public_id || null, id]);
+      return { status: statusTypes.SUCCESS, payload: data };
+    } catch (error) {
+      throw error;
     }
   }
   static async delete(id) {
-    await pool.execute("UPDATE costumers SET deleted_at = CURRENT_TIMESTAMP WHERE id =?", [id]);
-
-    return { status: "success" };
+    try {
+      await pool.execute("UPDATE costumers SET deleted_at = CURRENT_TIMESTAMP WHERE id =?", [id]);
+      return { payload: "Costumer deleted" };
+    } catch (error) {
+      throw error;
+    }
   }
   static async create(body) {
     try {
-      const { success, data, error } = costumerSchema.safeParse({ id: 1, ...body });
-      if (!success) return { error };
-      console.log(data);
       await pool.execute("INSERT INTO costumers (name, account_number, logo, logo_public_id) VALUES(?,?,?,?);", [data.name, data.account_number, data.logo, data.logo_public_id]);
-      return { status: "success" };
+      return { status: statusTypes.SUCCESS, payload: "Costumer created." };
     } catch (error) {
-      return { error };
+      return error;
     }
   }
 
@@ -44,6 +47,8 @@ export default class CostumersManager {
     try {
       const [[{ logo_public_id }]] = await pool.execute("SELECT logo_public_id FROM costumers WHERE id = ?", [id]);
       return logo_public_id;
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 }

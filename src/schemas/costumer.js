@@ -7,3 +7,5 @@ export const costumerSchema = z.object({
   logo: z.string().url(),
   logo_public_id: z.string(),
 });
+
+export const costumerOptionalSchema = costumerSchema.partial({ logo_public_id: true });

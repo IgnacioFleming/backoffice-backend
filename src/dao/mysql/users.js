@@ -19,12 +19,12 @@ export default class UsersManager {
     }
   }
 
-  static async get() {
+  static async getAll() {
     try {
       const [users] = await pool.query("SELECT * FROM users;");
-      return { status: "success", payload: users };
+      return { payload: users };
     } catch (error) {
-      return { status: "error", error };
+      throw error;
     }
   }
 

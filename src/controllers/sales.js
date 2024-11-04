@@ -2,22 +2,14 @@ import { pool } from "../config/dbconfig-mysql.js";
 import OrdersManager from "../dao/mysql/orders.js";
 import SalesManager from "../dao/mysql/sales.js";
 import { generateMockedOrders } from "../mocks/orders.js";
+import controllerHandlers from "../utils/controllerHandlers.js";
+import responses from "../utils/responses.js";
 
 const getAll = async (req, res) => {
-  const sales = await SalesManager.getAll();
-  res.json({ status: "success", payload: sales });
+  const payload = await controllerHandlers.getResources(SalesManager, res);
+  responses.successResponse(res, payload);
 };
-const getById = async (req, res) => {
-  try {
-    const { body } = req;
-    const newOrder = await OrdersManager.create(body);
-    if (newOrder?.error) return res.status(400).send({ status: "error", error: newOrder.error });
 
-    res.json({ status: "success", payload: newOrder.status });
-  } catch (error) {
-    res.status(500).send({ status: "error", error });
-  }
-};
 const create = async (req, res) => {
   try {
     const { body } = req;

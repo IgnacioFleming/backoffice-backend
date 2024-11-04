@@ -1,15 +1,17 @@
 import ProductsManager from "../dao/mysql/products.js";
 import { generateMockedProducts } from "../mocks/products.js";
+import controllerHandlers from "../utils/controllerHandlers.js";
+import responses from "../utils/responses.js";
 
 const getProducts = async (req, res) => {
-  const products = await ProductsManager.getAll();
-  res.json({ status: "success", payload: products });
+  const payload = await controllerHandlers.getResources(ProductsManager, res);
+  responses.successResponse(res, payload);
 };
 
 const getProductById = async (req, res) => {
   const { id } = req.params;
-  const product = await ProductsManager.getById(id);
-  res.json({ status: "success", payload: product });
+  const payload = await controllerHandlers.getResourcesById(id);
+  responses.successResponse(res, payload);
 };
 const createProduct = async (req, res) => {
   try {
