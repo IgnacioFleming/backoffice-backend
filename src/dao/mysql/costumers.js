@@ -37,7 +37,7 @@ export default class CostumersManager {
   static async create(body) {
     try {
       await pool.execute("INSERT INTO costumers (name, account_number, logo, logo_public_id) VALUES(?,?,?,?);", [data.name, data.account_number, data.logo, data.logo_public_id]);
-      return { status: statusTypes.SUCCESS, payload: "Costumer created." };
+      return { payload: "Costumer created." };
     } catch (error) {
       return error;
     }

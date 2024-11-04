@@ -28,15 +28,9 @@ export default class SalesManager {
       if (connection) connection.release();
     }
   }
-  static async create({ costumer_id, items_quantity, total_amount, products }) {
+  static async create(data) {
     let connection;
     try {
-      const saleData = { id: 1, sale_id: 1, costumer_id, items_quantity, total_amount, is_payed: false, is_delivered: false };
-      const { success, data, error } = saleSchema.safeParse(saleData);
-      if (!success) return { error };
-      if (error) {
-        console.log(error.issues[0].path);
-      }
       connection = await pool.getConnection();
       await connection.beginTransaction();
       const [result] = await connection.execute("INSERT INTO sales (costumer_id, items_quantity, total_amount) VALUES(?,?,?)", [data.costumer_id, data.items_quantity, data.total_amount]);
@@ -49,14 +43,12 @@ export default class SalesManager {
       );
 
       await connection.commit();
-      console.log("transaccion completada con exito");
+      return { payload: "The transaction was completed successfully" };
     } catch (error) {
       if (connection) await connection.rollback();
-      console.log("error en la transacción, se revierten los cambios ", error);
+      throw error;
     } finally {
       if (connection) connection.release();
     }
-
-    return { status: "success" };
   }
 }

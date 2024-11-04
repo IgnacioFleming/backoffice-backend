@@ -16,12 +16,11 @@ const getById = async (req, res) => {
 };
 const create = async (req, res) => {
   try {
-    const { body } = req;
-    const newOrder = await OrdersManager.create(body);
-    if (newOrder?.error) return res.status(400).send({ status: "error", error: newOrder.error });
-    res.json({ status: "success", payload: newOrder.status });
+    const { body } = req.body;
+    const payload = await controllerHandlers.validateBody(res, body, OrdersManager);
+    responses.successResponse(res, payload);
   } catch (error) {
-    res.status(500).send({ status: "error", error });
+    return responses.serverErrorResponse(res, error);
   }
 };
 const update = async (req, res) => {

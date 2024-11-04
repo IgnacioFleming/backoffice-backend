@@ -8,7 +8,7 @@ export default class ProductsManager {
 
   static async getById(id) {
     const [[product]] = await pool.execute("SELECT * FROM products WHERE id = ?", [id]);
-    return { payload: costumer };
+    return { payload: product };
   }
   static async update(id, body) {
     const product = await this.getById(id);
@@ -24,13 +24,9 @@ export default class ProductsManager {
     await pool.execute("UPDATE products SET deleted_at = current_timestamp WHERE id =?", [id]);
     return { status: "success" };
   }
-  static async create(body) {
-    const { success, data, error } = productSchema.safeParse({ id: 1, ...body });
-    if (!success) return { error };
-    if (error) return { status: "error", error: error.issues[0].path };
+  static async create(data) {
     await pool.query("INSERT INTO products (name, price, stock, category, description, thumbnail, thumbnail_public_id) VALUES(?,?,?,?,?,?,?)", [data.name, data.price, data.stock, data.category, data.description, data.thumbnail, data.thumbnail_public_id]);
-
-    return { status: "success" };
+    return { status: statusTypes.SUCCESS, payload: "Product created." };
   }
 
   static async getImgPublicIdById(id) {
