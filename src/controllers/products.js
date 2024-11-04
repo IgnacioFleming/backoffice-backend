@@ -33,6 +33,7 @@ const updateProduct = async (req, res) => {
     body.price = parseFloat(body.price);
     body.stock = parseInt(body.stock);
     req.fileURL && (body.thumbnail = req.fileURL);
+    console.log(body.thumbnail);
     req.imgPublicId && (body.thumbnail_public_id = req.imgPublicId);
     const updateProduct = await ProductsManager.update(id, body);
     res.json({ status: "success", payload: updateProduct });
