@@ -41,18 +41,14 @@ export default class OrdersManager {
       if (connection) connection.release();
     }
   }
+
   static async delete(id) {
     await pool.execute("DELETE FROM orders WHERE id =?", [id]);
     return { status: "success" };
   }
-  static async create(body) {
-    const { success, data, error } = orderSchema.safeParse({ id: 1, ...body });
-    if (!success) return { error };
-    if (error) {
-      console.log(error.issues[0].path);
-    }
-    await pool.query("INSERT INTO orders (sale_id, product_id, quantity, amount) VALUES(?,?,?,?)", [data.sale_id, data.product_id, data.quantity, data.amount]);
 
-    return { status: "success" };
+  static async create(body) {
+    await pool.query("INSERT INTO orders (sale_id, product_id, quantity, amount) VALUES(?,?,?,?)", [data.sale_id, data.product_id, data.quantity, data.amount]);
+    return { status: statusTypes.SUCCESS, payload: "Order created." };
   }
 }

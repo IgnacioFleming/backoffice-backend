@@ -1,7 +1,7 @@
 import CostumersManager from "../dao/mysql/costumers.js";
 import responses, { statusTypes } from "./responses.js";
 
-const validateBody = async (req, res, body, schema) => {
+const validateBody = async (res, body, schema) => {
   try {
     const { success, data, ZodError } = schema.safeParse({ id: 1, ...body });
     if (!success) return responses.clientErrorResponse(res, ZodError);
@@ -18,6 +18,15 @@ const costumersBodyHandler = (req) => {
   body.account_number = parseInt(body.account_number);
   req.fileURL && (body.logo = req.fileURL);
   req.imgPublicId && (body.logo_public_id = req.imgPublicId);
+  return body;
+};
+
+const productsBodyHandler = (req) => {
+  const { body } = req;
+  body.price = parseFloat(body.price);
+  body.stock = parseInt(body.stock);
+  body.thumbnail = req.fileURL || body.thumbnail;
+  req.imgPublicId && (body.thumbnail_public_id = req.imgPublicId);
   return body;
 };
 
@@ -45,4 +54,5 @@ export default {
   costumersBodyHandler,
   getResources,
   getResourcesById,
+  productsBodyHandler,
 };

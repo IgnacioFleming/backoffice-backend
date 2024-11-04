@@ -15,16 +15,11 @@ const getProductById = async (req, res) => {
 };
 const createProduct = async (req, res) => {
   try {
-    const { body } = req;
-    body.price = parseFloat(body.price);
-    body.stock = parseInt(body.stock);
-    body.thumbnail = req.fileURL || body.thumbnail;
-    req.imgPublicId && (body.thumbnail_public_id = req.imgPublicId);
-    const newProduct = await ProductsManager.create(body);
-    if (newProduct?.error) return res.json({ status: "error", error: newProduct.error });
-    res.json({ status: "success", payload: newProduct.status });
+    const body = controllerHandlers.productsBodyHandler(req);
+    const payload = await controllerHandlers.validateBody(res, body, ProductsManager);
+    responses.successResponse(res, payload);
   } catch (error) {
-    console.log("Exception throwed", error);
+    return responses.serverErrorResponse(res, error);
   }
 };
 

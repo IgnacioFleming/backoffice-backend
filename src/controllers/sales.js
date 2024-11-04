@@ -13,11 +13,10 @@ const getAll = async (req, res) => {
 const create = async (req, res) => {
   try {
     const { body } = req;
-    const newOrder = await SalesManager.create(body);
-    if (newOrder?.error) return res.status(400).send({ status: "error", error: newOrder.error });
-    res.json({ status: "success", payload: newOrder.status });
+    const payload = await controllerHandlers.validateBody(res, { sale_id: 1, ...body }, SalesManager);
+    responses.successResponse(res, payload);
   } catch (error) {
-    res.status(500).send({ status: "error", error });
+    return responses.serverErrorResponse(res, error);
   }
 };
 const update = async (req, res) => {
