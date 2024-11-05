@@ -5,7 +5,4 @@ export const saleRouter = Router();
 saleRouter.use(auth);
 saleRouter.get("/", salesController.getAll);
 saleRouter.post("/", salesController.create);
-// saleRouter.get("/:id", salesController.getById);
-// saleRouter.post("/mocks", salesController.createMockedSales);
-// saleRouter.put("/:id", salesController.update);
 saleRouter.delete("/:id", salesController.deleteSale);

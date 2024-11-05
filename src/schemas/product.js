@@ -8,7 +8,7 @@ export const productSchema = z.object({
   category: z.string().max(50),
   description: z.string(),
   thumbnail: z.string().url(),
-  thumbnail_public_id: z.string(),
+  thumbnail_public_id: z.string().nullable(),
 });
 
-export const productSchemaOptional = productSchema.partial({ thumbnail_public_id: true });
+// export const productSchemaOptional = productSchema.partial({ thumbnail_public_id: true });

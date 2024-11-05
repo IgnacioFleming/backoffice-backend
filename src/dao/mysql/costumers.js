@@ -6,7 +6,7 @@ export default class CostumersManager {
       const [costumers] = await pool.query("SELECT * FROM costumers WHERE deleted_at IS NULL ORDER BY id ASC");
       return { payload: costumers };
     } catch (error) {
-      throw error;
+      throw { error };
     }
   }
 
@@ -15,15 +15,15 @@ export default class CostumersManager {
       const [[costumer]] = await pool.execute("SELECT * FROM costumers WHERE id = ?", [id]);
       return { payload: costumer };
     } catch (error) {
-      throw error;
+      throw { error };
     }
   }
   static async update(id, data) {
     try {
-      await pool.execute("UPDATE costumers SET name=?, account_number=? , logo=? , logo_public_id=?  WHERE id=?", [data.name, data.account_number, data.logo, data.logo_public_id || null, id]);
-      return { status: statusTypes.SUCCESS, payload: data };
+      await pool.execute("UPDATE costumers SET name=?, account_number=? , logo=? , logo_public_id=?  WHERE id=?", [data.name, data.account_number, data.logo, data.logo_public_id, id]);
+      return { payload: data };
     } catch (error) {
-      throw error;
+      throw { error };
     }
   }
   static async delete(id) {
@@ -31,7 +31,7 @@ export default class CostumersManager {
       await pool.execute("UPDATE costumers SET deleted_at = CURRENT_TIMESTAMP WHERE id =?", [id]);
       return { payload: "Costumer deleted" };
     } catch (error) {
-      throw error;
+      throw { error };
     }
   }
   static async create(body) {
@@ -39,16 +39,16 @@ export default class CostumersManager {
       await pool.execute("INSERT INTO costumers (name, account_number, logo, logo_public_id) VALUES(?,?,?,?);", [data.name, data.account_number, data.logo, data.logo_public_id]);
       return { payload: "Costumer created." };
     } catch (error) {
-      return error;
+      throw { error };
     }
   }
 
   static async getImgPublicIdById(id) {
     try {
       const [[{ logo_public_id }]] = await pool.execute("SELECT logo_public_id FROM costumers WHERE id = ?", [id]);
-      return logo_public_id;
+      return { payload: logo_public_id };
     } catch (error) {
-      throw error;
+      throw { error };
     }
   }
 }
