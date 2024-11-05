@@ -4,22 +4,24 @@ import { generateMockedOrders } from "../mocks/orders.js";
 import { orderSchema } from "../schemas/order.js";
 import controllerHandlers from "../utils/controllerHandlers.js";
 import responses from "../utils/responses.js";
+import { modelMethods } from "../utils/utils.js";
 
 const getAll = async (req, res) => {
-  const payload = await controllerHandlers.getResources(OrdersManager, res);
-  responses.successResponse(res, payload);
+  await controllerHandlers.getResources(OrdersManager, res);
 };
 
 const getById = async (req, res) => {
   const { id } = req.params;
-  const payload = await controllerHandlers.getResourcesById(id);
+  const { payload, error } = await controllerHandlers.getResourcesById(res, OrdersManager, id);
+  if (error) return;
+  console.log("paso por el order number");
   responses.successResponse(res, payload);
 };
 const create = async (req, res) => {
   try {
     const { body } = req.body;
-    const payload = await controllerHandlers.validateBody(res, body, OrdersManager, "create");
-    responses.successResponse(res, payload);
+    const { validatedBody } = await controllerHandlers.validateBody(res, body, orderSchema);
+    await controllerHandlers.callModelAndRespond(res, validatedBody, OrdersManager, modelMethods.CREATE);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
   }
@@ -28,24 +30,23 @@ const update = async (req, res) => {
   try {
     const { id } = req.params;
     const { body } = req;
-    const updatedOrder = await controllerHandlers.validateBody(res, body, orderSchema, "update", id);
-    responses.successResponse(res, updatedOrder);
+    const { validatedBody } = await controllerHandlers.validateBody(res, body, orderSchema);
+    await controllerHandlers.callModelAndRespond(res, validatedBody, OrdersManager, modelMethods.UPDATE, id);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
   }
 };
 const deleteOrder = async (req, res) => {
   try {
-    const payload = await controllerHandlers.deleteResource(req, OrdersManager);
-    responses.successResponse(res, payload);
+    await controllerHandlers.deleteResource(req, OrdersManager);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
   }
 };
 const getOrdersByOrderNumber = async (req, res) => {
   const { sale_id } = req.params;
-  const orders = await OrdersManager.getByOrderNumber(sale_id);
-  res.json({ status: "success", payload: orders });
+  const { payload } = await OrdersManager.getByOrderNumber(sale_id);
+  responses.successResponse(res, payload);
 };
 
 const createMockedOrders = async (req, res) => {

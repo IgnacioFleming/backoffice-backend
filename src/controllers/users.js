@@ -3,8 +3,7 @@ import controllerHandlers from "../utils/controllerHandlers.js";
 import responses from "../utils/responses.js";
 
 const getAll = async (req, res) => {
-  const payload = await controllerHandlers.getResources(UsersManager, res);
-  responses.successResponse(res, payload);
+  await controllerHandlers.getResources(UsersManager, res);
 };
 
 const handleUserState = async (req, res) => {
