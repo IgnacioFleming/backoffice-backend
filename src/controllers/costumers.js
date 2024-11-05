@@ -12,7 +12,7 @@ const getCostumers = async (req, res) => {
 const createCostumer = async (req, res) => {
   try {
     const body = controllerHandlers.costumersBodyHandler(req);
-    const payload = await controllerHandlers.validateBody(req, res, body, costumerSchema, "create");
+    const payload = await controllerHandlers.validateBody(res, body, costumerSchema, "create");
     responses.successResponse(res, payload);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
@@ -25,7 +25,7 @@ const updateCostumer = async (req, res) => {
     const body = controllerHandlers.costumersBodyHandler(req);
     const costumer = await controllerHandlers.getResourcesById(CostumersManager, res, id);
     const updatedCostumer = { ...costumer, ...body };
-    const payload = await controllerHandlers.validateBody(req, res, updatedCostumer, costumerSchema, "update");
+    const payload = await controllerHandlers.validateBody(res, updatedCostumer, costumerSchema, "update", id);
     responses.successResponse(res, payload);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
@@ -45,6 +45,7 @@ const createMockedCostumers = async (req, res) => {
   try {
     const { quantity } = req.query;
     const mockedCostumers = await generateMockedCostumers(quantity);
+    console.log(mockedCostumers);
     mockedCostumers.forEach(async (costumer) => {
       await CostumersManager.create(costumer);
     });
