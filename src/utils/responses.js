@@ -5,11 +5,11 @@ export const statusTypes = {
   NOT_FOUND: "not_found",
 };
 
-const successResponse = (res, payload, status = 200) => {
+const successResponse = (res, payload = "OK", status = 200) => {
   res.status(status).json({ status: statusTypes.SUCCESS, payload });
 };
 
-const clientErrorResponse = (res, error, status = 400) => {
+const clientErrorResponse = (res, error = "Bad Request", status = 400) => {
   res.status(status).json({
     status: statusTypes.ERROR,
     error,

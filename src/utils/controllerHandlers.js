@@ -1,11 +1,11 @@
 import CostumersManager from "../dao/mysql/costumers.js";
 import responses, { statusTypes } from "./responses.js";
 
-const validateBody = async (res, body, schema) => {
+const validateBody = async (res, body, schema, method, id) => {
   try {
     const { success, data, ZodError } = schema.safeParse({ id: 1, ...body });
     if (!success) return responses.clientErrorResponse(res, ZodError);
-    const { status, payload, error } = await CostumersManager.create(data);
+    const { status, payload, error } = await CostumersManager[method](id || data, data);
     if (status === statusTypes.ERROR) return responses.clientErrorResponse(res, error);
     return payload;
   } catch (error) {
@@ -49,10 +49,18 @@ const getResourcesById = async (dao, res, id) => {
   }
 };
 
+const deleteResource = async (req, dao) => {
+  const { id } = req.params;
+  const { payload, error } = await dao.delete(id);
+  if (error) return responses.clientErrorResponse(error);
+  return payload;
+};
+
 export default {
   validateBody,
   costumersBodyHandler,
   getResources,
   getResourcesById,
   productsBodyHandler,
+  deleteResource,
 };

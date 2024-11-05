@@ -1,6 +1,7 @@
 import { pool } from "../config/dbconfig-mysql.js";
 import OrdersManager from "../dao/mysql/orders.js";
 import { generateMockedOrders } from "../mocks/orders.js";
+import { orderSchema } from "../schemas/order.js";
 import controllerHandlers from "../utils/controllerHandlers.js";
 import responses from "../utils/responses.js";
 
@@ -17,7 +18,7 @@ const getById = async (req, res) => {
 const create = async (req, res) => {
   try {
     const { body } = req.body;
-    const payload = await controllerHandlers.validateBody(res, body, OrdersManager);
+    const payload = await controllerHandlers.validateBody(res, body, OrdersManager, "create");
     responses.successResponse(res, payload);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
@@ -27,21 +28,18 @@ const update = async (req, res) => {
   try {
     const { id } = req.params;
     const { body } = req;
-    const updateOrder = await OrdersManager.update(id, body);
-    if (updateOrder?.error) return res.status(400).send({ status: "error", error: updateOrder.error });
-    res.json({ status: "success", payload: updateOrder });
+    const updatedOrder = await controllerHandlers.validateBody(res, body, orderSchema, "update", id);
+    responses.successResponse(res, updatedOrder);
   } catch (error) {
-    res.status(500).send({ status: "error", error });
+    return responses.serverErrorResponse(res, error);
   }
 };
 const deleteOrder = async (req, res) => {
   try {
-    const { id } = req.params;
-    const deleteOrder = await OrdersManager.delete(id);
-    if (deleteOrder?.error) return res.status(400).send({ status: "error", error: deleteOrder.error });
-    res.json({ status: "success", payload: deleteOrder.status });
+    const payload = await controllerHandlers.deleteResource(req, OrdersManager);
+    responses.successResponse(res, payload);
   } catch (error) {
-    res.status(500).send({ status: "error", error });
+    return responses.serverErrorResponse(res, error);
   }
 };
 const getOrdersByOrderNumber = async (req, res) => {
@@ -59,7 +57,7 @@ const createMockedOrders = async (req, res) => {
     order.product_id = randomProductID;
     await OrdersManager.create(order);
   });
-  res.json({ status: "success", payload: "Orders created" });
+  responses.successResponse(res, "Mocked Order created successfully.");
 };
 
 export default {

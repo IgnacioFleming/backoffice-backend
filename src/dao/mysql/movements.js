@@ -25,8 +25,7 @@ export default class MovementsManager {
       const balance = movements.reduce((acc, { amount }) => acc + amount, 0);
       return { payload: { costumer, movements, balance } };
     } catch (error) {
-      console.log(error);
-      return { status: "error", error };
+      return { error };
     } finally {
       if (connection) connection.release();
     }

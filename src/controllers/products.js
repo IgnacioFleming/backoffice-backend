@@ -16,7 +16,7 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
   try {
     const body = controllerHandlers.productsBodyHandler(req);
-    const payload = await controllerHandlers.validateBody(res, body, ProductsManager);
+    const payload = await controllerHandlers.validateBody(res, body, ProductsManager, "create");
     responses.successResponse(res, payload);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
@@ -26,23 +26,21 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { body } = req;
-    body.price = parseFloat(body.price);
-    body.stock = parseInt(body.stock);
-    req.fileURL && (body.thumbnail = req.fileURL);
-    console.log(body.thumbnail);
-    req.imgPublicId && (body.thumbnail_public_id = req.imgPublicId);
-    const updateProduct = await ProductsManager.update(id, body);
-    res.json({ status: "success", payload: updateProduct });
+    const body = controllerHandlers.productsBodyHandler(req);
+    const payload = await controllerHandlers.validateBody(res, body, ProductsManager, "update", id);
+    responses.successResponse(res, payload);
   } catch (error) {
-    console.log("Exception throwed", error);
+    return responses.serverErrorResponse(res, error);
   }
 };
 
 const deleteProduct = async (req, res) => {
-  const { id } = req.params;
-  const deleteProduct = await ProductsManager.delete(id);
-  res.json({ status: "success", payload: deleteProduct.status });
+  try {
+    const payload = await controllerHandlers.deleteResource(req, ProductsManager);
+    responses.successResponse(res, payload);
+  } catch (error) {
+    return responses.serverErrorResponse(res, error);
+  }
 };
 
 const createMockedProducts = async (req, res) => {
@@ -51,7 +49,7 @@ const createMockedProducts = async (req, res) => {
   mockedProducts.forEach(async (product) => {
     await ProductsManager.create(product);
   });
-  res.json({ status: "success", payload: "Products created" });
+  responses.successResponse(res, "Mocked products created successfully.");
 };
 
 export default { getProducts, createProduct, updateProduct, deleteProduct, createMockedProducts, getProductById };

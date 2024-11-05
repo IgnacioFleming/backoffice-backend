@@ -6,13 +6,17 @@ export default class SalesManager {
       const [sales] = await pool.query("SELECT sales.id as salesId , sales.*, costumers.* from sales INNER JOIN costumers ON sales.costumer_id = costumers.id");
       return { payload: sales };
     } catch (error) {
-      throw error;
+      throw { error };
     }
   }
 
   static async getById(id) {
-    const [[sale]] = await pool.execute("SELECT * FROM sales WHERE id = ?", [id]);
-    return sale;
+    try {
+      const [[sale]] = await pool.execute("SELECT * FROM sales WHERE id = ?", [id]);
+      return { payload: sale };
+    } catch (error) {
+      throw { error };
+    }
   }
 
   static async delete(id) {
@@ -21,9 +25,9 @@ export default class SalesManager {
       connection = await pool.getConnection();
       const [result] = await connection.execute("DELETE FROM sales WHERE id =?", [id]);
       if (result.affectedRows === 0) return { status: "error", message: "The sale register weren't found" };
-      return { status: "success", message: "Sale successfully deleted." };
+      return { payload: "Sale successfully deleted." };
     } catch (error) {
-      return { status: "error", error };
+      return { error };
     } finally {
       if (connection) connection.release();
     }
@@ -46,7 +50,7 @@ export default class SalesManager {
       return { payload: "The transaction was completed successfully" };
     } catch (error) {
       if (connection) await connection.rollback();
-      throw error;
+      throw { error };
     } finally {
       if (connection) connection.release();
     }

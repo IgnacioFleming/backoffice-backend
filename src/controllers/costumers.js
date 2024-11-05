@@ -1,6 +1,6 @@
 import CostumersManager from "../dao/mysql/costumers.js";
 import { generateMockedCostumers } from "../mocks/costumers.js";
-import { costumerOptionalSchema, costumerSchema } from "../schemas/costumer.js";
+import { costumerSchema } from "../schemas/costumer.js";
 import controllerHandlers from "../utils/controllerHandlers.js";
 import responses from "../utils/responses.js";
 
@@ -12,7 +12,7 @@ const getCostumers = async (req, res) => {
 const createCostumer = async (req, res) => {
   try {
     const body = controllerHandlers.costumersBodyHandler(req);
-    const payload = await controllerHandlers.validateBody(req, res, body, costumerSchema);
+    const payload = await controllerHandlers.validateBody(req, res, body, costumerSchema, "create");
     responses.successResponse(res, payload);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
@@ -23,11 +23,9 @@ const updateCostumer = async (req, res) => {
   try {
     const { id } = req.params;
     const body = controllerHandlers.costumersBodyHandler(req);
-    const costumer = await CostumersManager.getById(id);
-    if (!costumer) return responses.clientErrorResponse(res, "Costumer does not exist.");
+    const costumer = await controllerHandlers.getResourcesById(CostumersManager, res, id);
     const updatedCostumer = { ...costumer, ...body };
-    updatedCostumer.logo_public_id ?? delete updatedCostumer.logo_public_id;
-    const payload = await controllerHandlers.validateBody(req, res, body, costumerOptionalSchema);
+    const payload = await controllerHandlers.validateBody(req, res, updatedCostumer, costumerSchema, "update");
     responses.successResponse(res, payload);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
@@ -36,8 +34,7 @@ const updateCostumer = async (req, res) => {
 
 const deleteCostumer = async (req, res) => {
   try {
-    const { id } = req.params;
-    const payload = await CostumersManager.delete(id);
+    const payload = await controllerHandlers.deleteResource(req, CostumersManager);
     responses.successResponse(res, payload);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
