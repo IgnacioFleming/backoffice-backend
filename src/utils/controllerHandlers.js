@@ -1,21 +1,30 @@
 import CostumersManager from "../dao/mysql/costumers.js";
 import responses, { statusTypes } from "./responses.js";
+import { destroyFile } from "./utils.js";
 
 const validateBody = async (res, body, schema, method, id) => {
   try {
     const { success, data, ZodError } = schema.safeParse({ id: 1, ...body });
-    if (!success) return responses.clientErrorResponse(res, ZodError);
+    if (!success) {
+      await destroyFile(body.thumbnail_public_id || body.logo_public_id);
+      return responses.clientErrorResponse(res, ZodError);
+    }
+
     const { status, payload, error } = await CostumersManager[method](id || data, data);
-    if (status === statusTypes.ERROR) return responses.clientErrorResponse(res, error);
+    if (status === statusTypes.ERROR) {
+      await destroyFile(body.thumbnail_public_id || body.logo_public_id);
+      return responses.clientErrorResponse(res, error);
+    }
     return payload;
   } catch (error) {
+    await destroyFile(body.thumbnail_public_id || body.logo_public_id);
     throw error;
   }
 };
 
 const costumersBodyHandler = (req) => {
   const { body } = req;
-  body.account_number = parseInt(body.account_number);
+  if (body.account_number) body.account_number = parseInt(body.account_number);
   req.fileURL && (body.logo = req.fileURL);
   req.imgPublicId && (body.logo_public_id = req.imgPublicId);
   return body;

@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { v2 as cloudinary } from "cloudinary";
 
 export const createHash = async (password) => bcrypt.hash(password, bcrypt.genSaltSync(10));
 
@@ -19,3 +20,5 @@ export const tokenExtractor = (req) => {
   }
   return token;
 };
+
+export const destroyFile = async (public_id) => await cloudinary.uploader.destroy(public_id);

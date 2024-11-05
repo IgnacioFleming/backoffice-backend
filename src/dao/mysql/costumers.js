@@ -20,6 +20,8 @@ export default class CostumersManager {
   }
   static async update(id, data) {
     try {
+      console.log(data);
+      console.log(id);
       await pool.execute("UPDATE costumers SET name=?, account_number=? , logo=? , logo_public_id=?  WHERE id=?", [data.name, data.account_number, data.logo, data.logo_public_id, id]);
       return { payload: data };
     } catch (error) {
@@ -34,7 +36,7 @@ export default class CostumersManager {
       throw { error };
     }
   }
-  static async create(body) {
+  static async create(data) {
     try {
       await pool.execute("INSERT INTO costumers (name, account_number, logo, logo_public_id) VALUES(?,?,?,?);", [data.name, data.account_number, data.logo, data.logo_public_id]);
       return { payload: "Costumer created." };
