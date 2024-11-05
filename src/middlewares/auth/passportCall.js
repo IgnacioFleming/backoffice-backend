@@ -12,11 +12,6 @@ export const passportCall = (strategy) => {
       req.user = user;
       req.session.passport = { user: { id: user.id } };
       req.isAuthenticated = () => req.session.passport.user && true;
-      req.signOut = async () => {
-        delete req.session.passport;
-        delete req.user;
-        return;
-      };
       next();
     })(req, res, next);
   };
