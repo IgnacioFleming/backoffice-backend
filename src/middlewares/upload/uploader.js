@@ -24,7 +24,6 @@ export const uploadMiddleware = ({ deletePrevImg = false, resource } = {}) => {
       if (err) {
         return res.status(400).send({ status: "error", error: "There was an error while uploading the file." });
       }
-
       if (!req.file) return next();
       const imgName = req.file.originalname.split(".")[0] + Date.now().toString();
       const foldername = req.originalUrl.split("/")[2];

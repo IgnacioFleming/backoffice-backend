@@ -1,12 +1,13 @@
 import { pool } from "../../config/dbconfig-mysql.js";
-import { saleSchema } from "../../schemas/sale.js";
+import { createCustomError } from "../../utils/errors/errorFactory.js";
+import { ERRORS } from "../../utils/errors/errorTypes.js";
 export default class SalesManager {
   static async getAll() {
     try {
       const [sales] = await pool.query("SELECT sales.id as salesId , sales.*, costumers.* from sales INNER JOIN costumers ON sales.costumer_id = costumers.id");
       return { payload: sales };
     } catch (error) {
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     }
   }
 
@@ -15,7 +16,7 @@ export default class SalesManager {
       const [[sale]] = await pool.execute("SELECT * FROM sales WHERE id = ?", [id]);
       return { payload: sale };
     } catch (error) {
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     }
   }
 
@@ -50,7 +51,7 @@ export default class SalesManager {
       return { payload: "The transaction was completed successfully" };
     } catch (error) {
       if (connection) await connection.rollback();
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     } finally {
       if (connection) connection.release();
     }

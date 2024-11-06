@@ -1,4 +1,6 @@
 import { pool } from "../../config/dbconfig-mysql.js";
+import { createCustomError } from "../../utils/errors/errorFactory.js";
+import { ERRORS } from "../../utils/errors/errorTypes.js";
 import { statusTypes } from "../../utils/responses.js";
 import CostumersManager from "./costumers.js";
 
@@ -24,7 +26,7 @@ export default class MovementsManager {
       const balance = movements.reduce((acc, { amount }) => acc + amount, 0);
       return { payload: { costumer, movements, balance } };
     } catch (error) {
-      return { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     } finally {
       if (connection) connection.release();
     }

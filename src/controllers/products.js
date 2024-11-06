@@ -6,12 +6,20 @@ import responses from "../utils/responses.js";
 import { modelMethods } from "../utils/utils.js";
 
 const getProducts = async (req, res) => {
-  await controllerHandlers.getResources(ProductsManager, res);
+  try {
+    await controllerHandlers.getResources(ProductsManager, res);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getProductById = async (req, res) => {
-  const { id } = req.params;
-  await controllerHandlers.getResourcesById(id);
+  try {
+    const { id } = req.params;
+    await controllerHandlers.getResourcesById(id);
+  } catch (error) {
+    next(error);
+  }
 };
 const createProduct = async (req, res) => {
   try {
@@ -19,7 +27,7 @@ const createProduct = async (req, res) => {
     const { validatedBody } = await controllerHandlers.validateBody(res, body, productSchema);
     await controllerHandlers.callModelAndRespond(res, validatedBody, ProductsManager, modelMethods.CREATE);
   } catch (error) {
-    return responses.serverErrorResponse(res, error);
+    next(error);
   }
 };
 
@@ -30,7 +38,7 @@ const updateProduct = async (req, res) => {
     const { validatedBody } = await controllerHandlers.validateBody(res, body, productSchema);
     await controllerHandlers.callModelAndRespond(res, validatedBody, ProductsManager, modelMethods.updateProduct, id);
   } catch (error) {
-    return responses.serverErrorResponse(res, error);
+    next(error);
   }
 };
 
@@ -38,17 +46,21 @@ const deleteProduct = async (req, res) => {
   try {
     await controllerHandlers.deleteResource(req, ProductsManager);
   } catch (error) {
-    return responses.serverErrorResponse(res, error);
+    next(error);
   }
 };
 
 const createMockedProducts = async (req, res) => {
-  const { quantity } = req.query;
-  const mockedProducts = await generateMockedProducts(quantity);
-  mockedProducts.forEach(async (product) => {
-    await ProductsManager.create(product);
-  });
-  responses.successResponse(res, "Mocked products created successfully.");
+  try {
+    const { quantity } = req.query;
+    const mockedProducts = await generateMockedProducts(quantity);
+    mockedProducts.forEach(async (product) => {
+      await ProductsManager.create(product);
+    });
+    responses.successResponse(res, "Mocked products created successfully.");
+  } catch (error) {
+    next(error);
+  }
 };
 
 export default { getProducts, createProduct, updateProduct, deleteProduct, createMockedProducts, getProductById };

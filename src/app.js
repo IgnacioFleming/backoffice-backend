@@ -14,6 +14,8 @@ import { sessionStore } from "./config/sessionsStorage.js";
 import { balancesRouter } from "./routes/balances.js";
 import { movementsRouter } from "./routes/movements.js";
 import { usersRouter } from "./routes/users.js";
+import { errorHandler } from "./middlewares/errors/errorHandler.js";
+import { unhandledRejection } from "./middlewares/errors/unhadledRejection.js";
 
 const app = express();
 app.use(cors(corsOptions));
@@ -31,6 +33,11 @@ app.use("/api/sessions", sessionRouter);
 app.use("/api/balances", balancesRouter);
 app.use("/api/movements", movementsRouter);
 app.use("/api/users", usersRouter);
+
+app.use(errorHandler);
+
+process.on("uncaughtException", unhandledRejection);
+process.on("unhandledRejection", unhandledRejection);
 
 const PORT = process.env.PORT || 8080;
 
