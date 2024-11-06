@@ -21,4 +21,12 @@ export const tokenExtractor = (req) => {
   return token;
 };
 
-export const destroyFile = async (public_id) => await cloudinary.uploader.destroy(public_id);
+export const destroyFile = async (public_id) => public_id && (await cloudinary.uploader.destroy(public_id));
+
+export const modelMethods = {
+  GET: "get",
+  GET_BY_ID: "getById",
+  UPDATE: "update",
+  CREATE: "create",
+  DELETE: "delete",
+};

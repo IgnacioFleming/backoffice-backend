@@ -3,17 +3,17 @@ import { generateMockedCostumers } from "../mocks/costumers.js";
 import { costumerSchema } from "../schemas/costumer.js";
 import controllerHandlers from "../utils/controllerHandlers.js";
 import responses from "../utils/responses.js";
+import { modelMethods } from "../utils/utils.js";
 
 const getCostumers = async (req, res) => {
-  const payload = await controllerHandlers.getResources(CostumersManager, res);
-  responses.successResponse(res, payload);
+  await controllerHandlers.getResources(CostumersManager, res);
 };
 
 const createCostumer = async (req, res) => {
   try {
     const body = controllerHandlers.costumersBodyHandler(req);
-    const payload = await controllerHandlers.validateBody(res, body, costumerSchema, "create");
-    responses.successResponse(res, payload);
+    const { validatedBody } = await controllerHandlers.validateBody(res, body, costumerSchema);
+    await controllerHandlers.callModelAndRespond(res, validatedBody, CostumersManager, modelMethods.CREATE);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
   }
@@ -23,10 +23,12 @@ const updateCostumer = async (req, res) => {
   try {
     const { id } = req.params;
     const body = controllerHandlers.costumersBodyHandler(req);
-    const costumer = await controllerHandlers.getResourcesById(CostumersManager, res, id);
-    const updatedCostumer = { ...costumer, ...body };
-    const payload = await controllerHandlers.validateBody(res, updatedCostumer, costumerSchema, "update", id);
-    responses.successResponse(res, payload);
+    const { error, payload } = await controllerHandlers.getResourcesById(res, CostumersManager, id);
+    if (error) return;
+    const updatedCostumer = { ...payload, ...body };
+    console.log(body);
+    const { validatedBody } = await controllerHandlers.validateBody(res, updatedCostumer, costumerSchema);
+    await controllerHandlers.callModelAndRespond(res, validatedBody, CostumersManager, modelMethods.UPDATE, id);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
   }
@@ -34,8 +36,7 @@ const updateCostumer = async (req, res) => {
 
 const deleteCostumer = async (req, res) => {
   try {
-    const payload = await controllerHandlers.deleteResource(req, CostumersManager);
-    responses.successResponse(res, payload);
+    await controllerHandlers.deleteResource(req, res, CostumersManager);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
   }
@@ -45,7 +46,6 @@ const createMockedCostumers = async (req, res) => {
   try {
     const { quantity } = req.query;
     const mockedCostumers = await generateMockedCostumers(quantity);
-    console.log(mockedCostumers);
     mockedCostumers.forEach(async (costumer) => {
       await CostumersManager.create(costumer);
     });

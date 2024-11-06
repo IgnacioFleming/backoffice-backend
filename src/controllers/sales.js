@@ -1,17 +1,18 @@
 import SalesManager from "../dao/mysql/sales.js";
+import { saleSchema } from "../schemas/sale.js";
 import controllerHandlers from "../utils/controllerHandlers.js";
 import responses from "../utils/responses.js";
+import { modelMethods } from "../utils/utils.js";
 
 const getAll = async (req, res) => {
-  const payload = await controllerHandlers.getResources(SalesManager, res);
-  responses.successResponse(res, payload);
+  await controllerHandlers.getResources(SalesManager, res);
 };
 
 const create = async (req, res) => {
   try {
     const { body } = req;
-    const payload = await controllerHandlers.validateBody(res, { sale_id: 1, ...body }, SalesManager, "create");
-    responses.successResponse(res, payload);
+    const { validatedBody } = await controllerHandlers.validateBody(res, body, saleSchema);
+    await controllerHandlers.callModelAndRespond(res, { sale_id: 1, ...validatedBody }, SalesManager, modelMethods.CREATE);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
   }
@@ -19,8 +20,7 @@ const create = async (req, res) => {
 
 const deleteSale = async (req, res) => {
   try {
-    const payload = await controllerHandlers.deleteResource(req, SalesManager);
-    responses.successResponse(res, payload);
+    await controllerHandlers.deleteResource(req, SalesManager);
   } catch (error) {
     return responses.serverErrorResponse(res, error);
   }

@@ -19,7 +19,6 @@ export default class MovementsManager {
         ORDER BY date ASC;`,
         [id, id]
       );
-
       const costumer = await CostumersManager.getById(id);
       if (!costumer) return { status: statusTypes.ERROR, error: "The costumer provided does not exist." };
       const balance = movements.reduce((acc, { amount }) => acc + amount, 0);
