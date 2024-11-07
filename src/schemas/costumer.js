@@ -8,4 +8,4 @@ export const costumerSchema = z.object({
   logo_public_id: z.string().nullable(),
 });
 
-// export const costumerOptionalSchema = costumerSchema.partial({ logo_public_id: true });
+export const costumerOptionalSchema = costumerSchema.partial({ logo_public_id: true, logo: true });

@@ -1,12 +1,13 @@
 import { pool } from "../../config/dbconfig-mysql.js";
-import { orderSchema } from "../../schemas/order.js";
+import { createCustomError } from "../../utils/errors/errorFactory.js";
+import { ERRORS } from "../../utils/errors/errorTypes.js";
 export default class OrdersManager {
   static async getAll() {
     try {
       const [orders] = await pool.query("SELECT orders.id ,orders.sale_id, products.name, products.price, orders.quantity, orders.amount, products.category FROM orders INNER JOIN products ON orders.product_id = products.id ORDER BY orders.id ASC");
       return { payload: orders };
     } catch (error) {
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     }
   }
 
@@ -15,7 +16,7 @@ export default class OrdersManager {
       const [[order]] = await pool.execute("SELECT * FROM orders WHERE id = ?", [id]);
       return { payload: order };
     } catch (error) {
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     }
   }
 
@@ -24,7 +25,7 @@ export default class OrdersManager {
       const [orders] = await pool.execute("SELECT orders.id ,orders.sale_id, products.name, products.price, orders.quantity, orders.amount, products.category FROM orders INNER JOIN products ON orders.product_id = products.id WHERE orders.sale_id = ? ORDER BY orders.id ASC", [sale_id]);
       return { payload: orders };
     } catch (error) {
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     }
   }
 
@@ -39,7 +40,7 @@ export default class OrdersManager {
       return { payload: updatedOrder };
     } catch (error) {
       if (connection) connection.rollback();
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     } finally {
       if (connection) connection.release();
     }
@@ -50,7 +51,7 @@ export default class OrdersManager {
       await pool.execute("DELETE FROM orders WHERE id =?", [id]);
       return { payload: "Order deleted successfully." };
     } catch (error) {
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     }
   }
 
@@ -59,7 +60,7 @@ export default class OrdersManager {
       await pool.query("INSERT INTO orders (sale_id, product_id, quantity, amount) VALUES(?,?,?,?)", [data.sale_id, data.product_id, data.quantity, data.amount]);
       return { payload: "Order created." };
     } catch (error) {
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     }
   }
 }

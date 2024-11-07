@@ -1,4 +1,6 @@
 import { pool } from "../../config/dbconfig-mysql.js";
+import { createCustomError } from "../../utils/errors/errorFactory.js";
+import { ERRORS } from "../../utils/errors/errorTypes.js";
 
 export default class UsersManager {
   static async create(body) {
@@ -13,7 +15,7 @@ export default class UsersManager {
 
       return { payload: body };
     } catch (error) {
-      return { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     } finally {
       if (connection) connection.release();
     }
@@ -24,7 +26,7 @@ export default class UsersManager {
       const [users] = await pool.query("SELECT * FROM users;");
       return { payload: users };
     } catch (error) {
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     }
   }
 
@@ -34,7 +36,7 @@ export default class UsersManager {
       if (!user) return { error: "User does not exist." };
       return { payload: user };
     } catch (error) {
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     }
   }
 
@@ -44,7 +46,7 @@ export default class UsersManager {
       if (!user) return { status: "error", error: "User does not exist." };
       return { payload: user };
     } catch (error) {
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     }
   }
   static async handleUserState(id) {
@@ -56,7 +58,7 @@ export default class UsersManager {
       const [state] = await connection.execute("UPDATE users SET is_enabled = ? WHERE id = ?;", [newState, id]);
       return { payload: state };
     } catch (error) {
-      throw { error };
+      throw createCustomError(ERRORS.UNHANDLED);
     } finally {
       if (connection) connection.release();
     }

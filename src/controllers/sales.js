@@ -5,7 +5,11 @@ import responses from "../utils/responses.js";
 import { modelMethods } from "../utils/utils.js";
 
 const getAll = async (req, res) => {
-  await controllerHandlers.getResources(SalesManager, res);
+  try {
+    await controllerHandlers.getResources(SalesManager, res);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const create = async (req, res) => {
@@ -14,7 +18,7 @@ const create = async (req, res) => {
     const { validatedBody } = await controllerHandlers.validateBody(res, body, saleSchema);
     await controllerHandlers.callModelAndRespond(res, { sale_id: 1, ...validatedBody }, SalesManager, modelMethods.CREATE);
   } catch (error) {
-    return responses.serverErrorResponse(res, error);
+    next(error);
   }
 };
 
@@ -22,7 +26,7 @@ const deleteSale = async (req, res) => {
   try {
     await controllerHandlers.deleteResource(req, SalesManager);
   } catch (error) {
-    return responses.serverErrorResponse(res, error);
+    next(error);
   }
 };
 
