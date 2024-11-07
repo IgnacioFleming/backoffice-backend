@@ -7,7 +7,7 @@ export default class SalesManager {
       const [sales] = await pool.query("SELECT sales.id as salesId , sales.*, costumers.* from sales INNER JOIN costumers ON sales.costumer_id = costumers.id");
       return { payload: sales };
     } catch (error) {
-      throw createCustomError(ERRORS.UNHANDLED);
+      throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
     }
   }
 
@@ -16,7 +16,7 @@ export default class SalesManager {
       const [[sale]] = await pool.execute("SELECT * FROM sales WHERE id = ?", [id]);
       return { payload: sale };
     } catch (error) {
-      throw createCustomError(ERRORS.UNHANDLED);
+      throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
     }
   }
 
@@ -24,11 +24,10 @@ export default class SalesManager {
     let connection;
     try {
       connection = await pool.getConnection();
-      const [result] = await connection.execute("DELETE FROM sales WHERE id =?", [id]);
-      if (result.affectedRows === 0) return { status: "error", message: "The sale register weren't found" };
-      return { payload: "Sale successfully deleted." };
+      const [payload] = await connection.execute("DELETE FROM sales WHERE id =?", [id]);
+      return { payload };
     } catch (error) {
-      return { error };
+      throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
     } finally {
       if (connection) connection.release();
     }
@@ -42,16 +41,16 @@ export default class SalesManager {
       const saleId = result.insertId;
 
       await Promise.all(
-        products.map(async (product) => {
-          await connection.execute("INSERT INTO orders (sale_id, product_id, quantity, amount) VALUES(?,?,?,?)", [saleId, product.id, product.quantity, product.amount]);
+        data.products.map(async (product) => {
+          console.log(product, "product");
+          await connection.execute("INSERT INTO orders (sale_id, product_id, quantity, amount) VALUES(?,?,?,?)", [saleId, product.product_id, product.quantity, product.amount]);
         })
       );
-
       await connection.commit();
       return { payload: "The transaction was completed successfully" };
     } catch (error) {
       if (connection) await connection.rollback();
-      throw createCustomError(ERRORS.UNHANDLED);
+      throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED);
     } finally {
       if (connection) connection.release();
     }

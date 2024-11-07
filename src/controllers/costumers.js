@@ -5,7 +5,7 @@ import controllerHandlers from "../utils/controllerHandlers.js";
 import responses from "../utils/responses.js";
 import { modelMethods } from "../utils/utils.js";
 
-const getCostumers = async (req, res) => {
+const getCostumers = async (req, res, next) => {
   try {
     await controllerHandlers.getResources(CostumersManager, res);
   } catch (error) {
@@ -23,12 +23,11 @@ const createCostumer = async (req, res, next) => {
   }
 };
 
-const updateCostumer = async (req, res) => {
+const updateCostumer = async (req, res, next) => {
   try {
     const { id } = req.params;
     const body = controllerHandlers.costumersBodyHandler(req);
-    const { error, payload } = await controllerHandlers.getResourcesById(res, CostumersManager, id);
-    if (error) return;
+    const { payload } = await controllerHandlers.getResourcesById(CostumersManager, id);
     const updatedCostumer = { ...payload, ...body };
     const { validatedBody } = await controllerHandlers.validateBody(res, updatedCostumer, costumerSchema);
     await controllerHandlers.callModelAndRespond(res, validatedBody, CostumersManager, modelMethods.UPDATE, id);
@@ -37,7 +36,7 @@ const updateCostumer = async (req, res) => {
   }
 };
 
-const deleteCostumer = async (req, res) => {
+const deleteCostumer = async (req, res, next) => {
   try {
     await controllerHandlers.deleteResource(req, res, CostumersManager);
   } catch (error) {
@@ -45,7 +44,7 @@ const deleteCostumer = async (req, res) => {
   }
 };
 
-const createMockedCostumers = async (req, res) => {
+const createMockedCostumers = async (req, res, next) => {
   try {
     const { quantity } = req.query;
     const mockedCostumers = await generateMockedCostumers(quantity);

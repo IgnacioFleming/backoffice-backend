@@ -1,4 +1,5 @@
 import { pool } from "../../config/dbconfig-mysql.js";
+import CustomError from "../../utils/errors/customError.js";
 import { createCustomError } from "../../utils/errors/errorFactory.js";
 import { ERRORS } from "../../utils/errors/errorTypes.js";
 import { statusTypes } from "../../utils/responses.js";
@@ -21,12 +22,13 @@ export default class MovementsManager {
         ORDER BY date ASC;`,
         [id, id]
       );
-      const costumer = await CostumersManager.getById(id);
-      if (!costumer) return { status: statusTypes.ERROR, error: "The costumer provided does not exist." };
+      const { payload: costumer } = await CostumersManager.getById(id);
+      if (!costumer) throw createCustomError(ERRORS.NOT_FOUND);
       const balance = movements.reduce((acc, { amount }) => acc + amount, 0);
       return { payload: { costumer, movements, balance } };
     } catch (error) {
-      throw createCustomError(ERRORS.UNHANDLED);
+      if (error instanceof CustomError) throw error;
+      throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(error, null, 2));
     } finally {
       if (connection) connection.release();
     }

@@ -1,4 +1,5 @@
 import CustomError from "../../utils/errors/customError.js";
+import { ERRORS } from "../../utils/errors/errorTypes.js";
 import { statusTypes } from "../../utils/responses.js";
 
 export const errorHandler = (err, req, res, next) => {
@@ -7,6 +8,11 @@ export const errorHandler = (err, req, res, next) => {
     try {
       message = JSON.parse(message);
     } catch {}
+    if (err.name === ERRORS.UNHANDLED.name) console.log(err);
+    if (err.name === ERRORS.DATABASE.name) {
+      console.log("DATABASE ERROR: ", message);
+      message = "There was an error in the database.";
+    }
     res.status(err.statusCode).json({ status: statusTypes.ERROR, name: err.name, message });
   } else {
     console.log("Unhandled error", err);

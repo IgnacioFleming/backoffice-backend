@@ -5,4 +5,12 @@ export const saleSchema = z.object({
   costumer_id: z.number().int().positive(),
   items_quantity: z.number().int().nonnegative(),
   total_amount: z.number().nonnegative(),
+  products: z
+    .object({
+      product_id: z.number().int().positive(),
+      quantity: z.number().int().positive(),
+      amount: z.number().int().nonnegative(),
+    })
+    .array()
+    .optional(),
 });
