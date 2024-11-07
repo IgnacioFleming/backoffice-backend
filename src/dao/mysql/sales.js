@@ -25,6 +25,7 @@ export default class SalesManager {
     try {
       connection = await pool.getConnection();
       const [payload] = await connection.execute("DELETE FROM sales WHERE id =?", [id]);
+      console.log(id);
       return { payload };
     } catch (error) {
       throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));

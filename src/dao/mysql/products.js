@@ -22,7 +22,6 @@ export default class ProductsManager {
   }
   static async update(id, data) {
     try {
-      console.log("llego al update");
       const [payload] = await pool.execute("UPDATE products SET name=?, price=? , stock=?, category=?, description=?, thumbnail=?, thumbnail_public_id=?  WHERE id=?", [data.name, data.price, data.stock, data.category, data.description, data.thumbnail || null, data.thumbnail_public_id || null, id]);
       return { payload };
     } catch (error) {

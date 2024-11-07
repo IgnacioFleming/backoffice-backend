@@ -14,7 +14,7 @@ const getAll = async (req, res, next) => {
 const create = async (req, res, next) => {
   try {
     const { body } = req;
-    const { validatedBody } = await controllerHandlers.validateBody(res, body, saleSchema);
+    const { validatedBody } = await controllerHandlers.validateBody(body, saleSchema);
     await controllerHandlers.callModelAndRespond(res, { sale_id: 1, ...validatedBody }, SalesManager, modelMethods.CREATE);
   } catch (error) {
     next(error);
