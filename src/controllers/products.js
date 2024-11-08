@@ -41,7 +41,6 @@ const updateProduct = async (req, res, next) => {
     if (!product) throw createCustomError(ERRORS.NOT_FOUND, "ID provided does not correspond to a product");
     const body = controllerHandlers.productsBodyHandler(req);
     const updateBody = { ...product, ...body };
-    console.log(updateBody);
     const { validatedBody } = await controllerHandlers.validateBody(updateBody, productSchemaOptional);
     await controllerHandlers.callModelAndRespond(res, validatedBody, ProductsManager, modelMethods.UPDATE, id);
   } catch (error) {

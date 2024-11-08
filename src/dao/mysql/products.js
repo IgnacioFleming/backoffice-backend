@@ -2,6 +2,8 @@ import { pool } from "../../config/dbconfig-mysql.js";
 import CustomError from "../../utils/errors/customError.js";
 import { createCustomError } from "../../utils/errors/errorFactory.js";
 import { ERRORS } from "../../utils/errors/errorTypes.js";
+import OrdersManager from "./orders.js";
+import SalesManager from "./sales.js";
 export default class ProductsManager {
   static async getAll() {
     try {
@@ -21,12 +23,18 @@ export default class ProductsManager {
     }
   }
   static async update(id, data) {
+    let connection;
     try {
-      const [payload] = await pool.execute("UPDATE products SET name=?, price=? , stock=?, category=?, description=?, thumbnail=?, thumbnail_public_id=?  WHERE id=?", [data.name, data.price, data.stock, data.category, data.description, data.thumbnail || null, data.thumbnail_public_id || null, id]);
+      connection = await pool.getConnection();
+      await connection.beginTransaction();
+      const [payload] = await pool.execute("UPDATE products SET name=?, price=? ,cost=?, stock=?, category=?, description=?, thumbnail=?, thumbnail_public_id=?  WHERE id=?", [data.name, data.price, data.cost, data.stock, data.category, data.description, data.thumbnail || null, data.thumbnail_public_id || null, id]);
+      connection.commit();
       return { payload };
     } catch (error) {
-      console.log("paso por el catch");
+      if (connection) connection.rollback();
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(error, null, 2));
+    } finally {
+      if (connection) connection.release();
     }
   }
   static async delete(id) {
@@ -39,7 +47,7 @@ export default class ProductsManager {
   }
   static async create(data) {
     try {
-      const [payload] = await pool.query("INSERT INTO products (name, price, stock, category, description, thumbnail, thumbnail_public_id) VALUES(?,?,?,?,?,?,?)", [data.name, data.price, data.stock, data.category, data.description, data.thumbnail, data.thumbnail_public_id]);
+      const [payload] = await pool.query("INSERT INTO products (name, price,cost, stock, category, description, thumbnail, thumbnail_public_id) VALUES(?,?,?,?,?,?,?)", [data.name, data.price, data.cost, data.stock, data.category, data.description, data.thumbnail, data.thumbnail_public_id]);
       return { payload };
     } catch (error) {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(error, null, 2));
@@ -51,7 +59,15 @@ export default class ProductsManager {
       const [[payload]] = await pool.execute("SELECT thumbnail_public_id FROM products WHERE id = ?", [id]);
       return { payload: payload?.thumbnail_public_id };
     } catch (err) {
-      throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
+      throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
+    }
+  }
+  static async getProductCostByProductId(product_id) {
+    try {
+      const [[{ cost }]] = await pool.execute("SELECT cost FROM products WHERE id = ?", [product_id]);
+      return cost;
+    } catch (error) {
+      throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);
     }
   }
 }
