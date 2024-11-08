@@ -1,4 +1,5 @@
 import { pool } from "../../config/dbconfig-mysql.js";
+import { recalculateSaleCostAndItemsHelper } from "../../utils/dbHelpers/helpers.js";
 import { createCustomError } from "../../utils/errors/errorFactory.js";
 import { ERRORS } from "../../utils/errors/errorTypes.js";
 import BalancesManager from "./balances.js";
@@ -50,9 +51,7 @@ export default class SalesManager {
       let sale_cost = 0;
       let sale_items_quantity = 0;
       await Promise.all(
-        //itero los products para crear cada una de las ordenes
         data.products.map(async ({ product_id, quantity, amount }) => {
-          //recupero el costo del producto.
           const cost = await ProductsManager.getProductCostByProductId(product_id);
           const order_cost = cost * quantity;
           sale_cost += order_cost;
@@ -62,16 +61,8 @@ export default class SalesManager {
           console.log(result);
         })
       );
-      // actualizo el costo y la cantidad de items de la venta.
-      console.log("paso la creacion de ordenes");
-      // await SalesManager.recalculateSaleCostAndItemsQuantity(sale_id);
-      const [[{ total_cost, total_quantity }]] = await connection.execute("SELECT sum(order_cost) as total_cost, sum(quantity) as total_quantity FROM orders WHERE sale_id = ?", [sale_id]);
-      await connection.execute("UPDATE sales SET sale_cost = ?,items_quantity = ? WHERE id = ?", [total_cost, total_quantity, sale_id]);
-      console.log("recalculo la venta");
-      //agrego el credito en el balance
+      await recalculateSaleCostAndItemsHelper(connection, sale_id);
       await BalancesManager.addCredit(data.costumer_id, data.total_amount);
-
-      console.log("agrego el credito al balance");
       await connection.commit();
       return { payload: "The transaction was completed successfully" };
     } catch (error) {
@@ -84,9 +75,8 @@ export default class SalesManager {
 
   static async recalculateSaleCostAndItemsQuantity(sale_id) {
     try {
-      const [[{ total_cost, total_quantity }]] = await pool.execute("SELECT sum(order_cost) as total_cost, sum(quantity) as total_quantity FROM orders WHERE sale_id = ?", [sale_id]);
-      const [update] = await pool.execute("UPDATE sales SET sale_cost = ?,items_quantity = ? WHERE id = ?", [total_cost, total_quantity, sale_id]);
-      return { payload: update };
+      const result = await recalculateSaleCostAndItemsHelper(pool, sale_id);
+      return { payload: result };
     } catch (error) {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);
     }
