@@ -15,7 +15,7 @@ export default class UsersManager {
 
       return { payload: body };
     } catch (error) {
-      throw createCustomError(ERRORS.UNHANDLED);
+      throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
     } finally {
       if (connection) connection.release();
     }
@@ -26,7 +26,7 @@ export default class UsersManager {
       const [users] = await pool.query("SELECT * FROM users;");
       return { payload: users };
     } catch (error) {
-      throw createCustomError(ERRORS.UNHANDLED);
+      throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
     }
   }
 
@@ -36,7 +36,7 @@ export default class UsersManager {
       if (!user) return { error: "User does not exist." };
       return { payload: user };
     } catch (error) {
-      throw createCustomError(ERRORS.UNHANDLED);
+      throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
     }
   }
 
@@ -46,7 +46,7 @@ export default class UsersManager {
       if (!user) return { status: "error", error: "User does not exist." };
       return { payload: user };
     } catch (error) {
-      throw createCustomError(ERRORS.UNHANDLED);
+      throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
     }
   }
   static async handleUserState(id) {
@@ -58,7 +58,7 @@ export default class UsersManager {
       const [state] = await connection.execute("UPDATE users SET is_enabled = ? WHERE id = ?;", [newState, id]);
       return { payload: state };
     } catch (error) {
-      throw createCustomError(ERRORS.UNHANDLED);
+      throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
     } finally {
       if (connection) connection.release();
     }

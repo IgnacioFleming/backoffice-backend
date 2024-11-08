@@ -6,7 +6,7 @@ import controllerHandlers from "../utils/controllerHandlers.js";
 import responses from "../utils/responses.js";
 import { modelMethods } from "../utils/utils.js";
 
-const getAll = async (req, res) => {
+const getAll = async (req, res, next) => {
   try {
     await controllerHandlers.getResources(OrdersManager, res);
   } catch (error) {
@@ -14,26 +14,25 @@ const getAll = async (req, res) => {
   }
 };
 
-const getById = async (req, res) => {
+const getById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { payload, error } = await controllerHandlers.getResourcesById(res, OrdersManager, id);
-    if (error) return;
+    const { payload } = await controllerHandlers.getResourcesById(OrdersManager, id);
     responses.successResponse(res, payload);
   } catch (error) {
     next(error);
   }
 };
-const create = async (req, res) => {
+const create = async (req, res, next) => {
   try {
-    const { body } = req.body;
+    const { body } = req;
     const { validatedBody } = await controllerHandlers.validateBody(res, body, orderSchema);
     await controllerHandlers.callModelAndRespond(res, validatedBody, OrdersManager, modelMethods.CREATE);
   } catch (error) {
     next(error);
   }
 };
-const update = async (req, res) => {
+const update = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { body } = req;
@@ -43,14 +42,14 @@ const update = async (req, res) => {
     next(error);
   }
 };
-const deleteOrder = async (req, res) => {
+const deleteOrder = async (req, res, next) => {
   try {
-    await controllerHandlers.deleteResource(req, OrdersManager);
+    await controllerHandlers.deleteResource(req, res, OrdersManager);
   } catch (error) {
     next(error);
   }
 };
-const getOrdersByOrderNumber = async (req, res) => {
+const getOrdersByOrderNumber = async (req, res, next) => {
   try {
     const { sale_id } = req.params;
     const { payload } = await OrdersManager.getByOrderNumber(sale_id);
@@ -60,7 +59,7 @@ const getOrdersByOrderNumber = async (req, res) => {
   }
 };
 
-const createMockedOrders = async (req, res) => {
+const createMockedOrders = async (req, res, next) => {
   try {
     const { quantity } = req.query;
     const mockedOrders = await generateMockedOrders(quantity);

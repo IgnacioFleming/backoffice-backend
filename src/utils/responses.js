@@ -6,7 +6,6 @@ export const statusTypes = {
 };
 
 const successResponse = (res, payload = "OK", status = 200) => {
-  console.log("success response", payload);
   return res.status(status).json({ status: statusTypes.SUCCESS, payload });
 };
 
