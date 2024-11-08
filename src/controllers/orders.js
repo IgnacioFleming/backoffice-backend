@@ -26,7 +26,7 @@ const getById = async (req, res, next) => {
 const create = async (req, res, next) => {
   try {
     const { body } = req;
-    const { validatedBody } = await controllerHandlers.validateBody(res, body, orderSchema);
+    const { validatedBody } = await controllerHandlers.validateBody(body, orderSchema);
     await controllerHandlers.callModelAndRespond(res, validatedBody, OrdersManager, modelMethods.CREATE);
   } catch (error) {
     next(error);
@@ -36,7 +36,10 @@ const update = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { body } = req;
-    const { validatedBody } = await controllerHandlers.validateBody(res, body, orderSchema);
+    const { payload: order } = await controllerHandlers.getResourcesById(OrdersManager, id);
+    if (!order) throw createCustomError(ERRORS.NOT_FOUND, "ID provided does not correspond to a product");
+    const updateOrder = { ...order, ...body };
+    const { validatedBody } = await controllerHandlers.validateBody(updateOrder, orderSchema);
     await controllerHandlers.callModelAndRespond(res, validatedBody, OrdersManager, modelMethods.UPDATE, id);
   } catch (error) {
     next(error);

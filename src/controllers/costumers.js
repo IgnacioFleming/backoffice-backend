@@ -16,7 +16,7 @@ const getCostumers = async (req, res, next) => {
 const createCostumer = async (req, res, next) => {
   try {
     const body = controllerHandlers.costumersBodyHandler(req);
-    const { validatedBody } = await controllerHandlers.validateBody(res, body, costumerOptionalSchema);
+    const { validatedBody } = await controllerHandlers.validateBody(body, costumerOptionalSchema);
     await controllerHandlers.callModelAndRespond(res, validatedBody, CostumersManager, modelMethods.CREATE);
   } catch (error) {
     next(error);
@@ -29,7 +29,7 @@ const updateCostumer = async (req, res, next) => {
     const body = controllerHandlers.costumersBodyHandler(req);
     const { payload } = await controllerHandlers.getResourcesById(CostumersManager, id);
     const updatedCostumer = { ...payload, ...body };
-    const { validatedBody } = await controllerHandlers.validateBody(res, updatedCostumer, costumerSchema);
+    const { validatedBody } = await controllerHandlers.validateBody(updatedCostumer, costumerSchema);
     await controllerHandlers.callModelAndRespond(res, validatedBody, CostumersManager, modelMethods.UPDATE, id);
   } catch (error) {
     next(error);

@@ -4,8 +4,7 @@ import { ERRORS } from "./errors/errorTypes.js";
 import responses, { statusTypes } from "./responses.js";
 import { destroyFile } from "./utils.js";
 
-const validateBody = async (res, body = {}, schema) => {
-  console.log(body);
+const validateBody = async (body = {}, schema) => {
   try {
     const { success, data, error } = schema.safeParse({ id: 1, ...body });
     if (!success) {

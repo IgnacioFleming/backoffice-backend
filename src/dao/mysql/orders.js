@@ -1,6 +1,7 @@
 import { pool } from "../../config/dbconfig-mysql.js";
 import { createCustomError } from "../../utils/errors/errorFactory.js";
 import { ERRORS } from "../../utils/errors/errorTypes.js";
+import SalesManager from "./sales.js";
 export default class OrdersManager {
   static async getAll() {
     try {
@@ -47,11 +48,25 @@ export default class OrdersManager {
   }
 
   static async delete(id) {
+    let connection;
     try {
-      const [deletedOrder] = await pool.execute("DELETE FROM orders WHERE id =?", [id]);
+      connection = await pool.getConnection();
+      const [[{ sale_id }]] = await connection.execute("SELECT sale_id FROM orders WHERE id=?", [id]);
+      const [deletedOrder] = await connection.execute("DELETE FROM orders WHERE id =?", [id]);
+
+      const { payload: orders } = await this.getByOrderNumber(sale_id);
+      console.log(orders, "orders");
+      if (orders.length === 0) {
+        const saleDeleted = await SalesManager.delete(sale_id);
+        console.log(saleDeleted);
+      } else {
+        await connection.execute("UPDATE sales SET items_quantity = (SELECT SUM(quantity) FROM orders WHERE sale_id = ? ), total_amount= (SELECT SUM(amount) FROM orders WHERE sale_id = ?) WHERE id = ?", [sale_id, sale_id, sale_id]);
+      }
       return { payload: deletedOrder };
     } catch (error) {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(error, null, 2));
+    } finally {
+      if (connection) connection.release();
     }
   }
 
