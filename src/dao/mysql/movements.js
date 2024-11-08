@@ -2,7 +2,6 @@ import { pool } from "../../config/dbconfig-mysql.js";
 import CustomError from "../../utils/errors/customError.js";
 import { createCustomError } from "../../utils/errors/errorFactory.js";
 import { ERRORS } from "../../utils/errors/errorTypes.js";
-import { statusTypes } from "../../utils/responses.js";
 import CostumersManager from "./costumers.js";
 
 export default class MovementsManager {
