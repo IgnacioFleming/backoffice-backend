@@ -70,4 +70,20 @@ export default class ProductsManager {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);
     }
   }
+  static async updateProductStock(product_id, stock_update, connection) {
+    try {
+      const dbClient = connection || (await pool.getConnection());
+      const [result] = await dbClient.execute(
+        `
+        UPDATE products SET stock = stock + ? WHERE id = ?
+        `,
+        [stock_update, product_id]
+      );
+      return result;
+    } catch (error) {
+      throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);
+    } finally {
+      if (dbClient) dbClient.release();
+    }
+  }
 }
