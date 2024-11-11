@@ -1,6 +1,7 @@
 import { pool } from "../../config/dbconfig-mysql.js";
 import { createCustomError } from "../../utils/errors/errorFactory.js";
 import { ERRORS } from "../../utils/errors/errorTypes.js";
+import BalancesManager from "./balances.js";
 export default class SalesManager {
   static async getAll() {
     try {
@@ -24,8 +25,9 @@ export default class SalesManager {
     let connection;
     try {
       connection = await pool.getConnection();
+      const { payload: sale } = await this.getById(id);
       const [payload] = await connection.execute("DELETE FROM sales WHERE id =?", [id]);
-      console.log(id);
+      await BalancesManager.addDebit(sale.costumer_id, sale.total_amount);
       return { payload };
     } catch (error) {
       throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
@@ -36,6 +38,7 @@ export default class SalesManager {
   static async create(data) {
     let connection;
     try {
+      console.log(data, "data del create sale");
       connection = await pool.getConnection();
       await connection.beginTransaction();
       const [result] = await connection.execute("INSERT INTO sales (costumer_id, items_quantity, total_amount) VALUES(?,?,?)", [data.costumer_id, data.items_quantity, data.total_amount]);
@@ -47,6 +50,7 @@ export default class SalesManager {
           await connection.execute("INSERT INTO orders (sale_id, product_id, quantity, amount) VALUES(?,?,?,?)", [saleId, product.product_id, product.quantity, product.amount]);
         })
       );
+      await BalancesManager.addCredit(data.costumer_id, data.total_amount);
       await connection.commit();
       return { payload: "The transaction was completed successfully" };
     } catch (error) {

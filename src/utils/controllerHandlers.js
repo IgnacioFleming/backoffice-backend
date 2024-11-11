@@ -50,6 +50,18 @@ const productsBodyHandler = (req) => {
   return body;
 };
 
+const salesBodyHandler = (req) => {
+  const { body } = req;
+  const { products } = body;
+  console.log(products);
+  const parsedBody = {};
+  parsedBody.product_id = parseInt(products.product_id);
+  parsedBody.quantity = parseInt(products.quantity);
+  parsedBody.amount = parseInt(products.amount);
+  body.products = [parsedBody];
+  return body;
+};
+
 const getResources = async (dao, res) => {
   try {
     const { payload } = await dao.getAll();
@@ -93,4 +105,5 @@ export default {
   productsBodyHandler,
   deleteResource,
   callModelAndRespond,
+  salesBodyHandler,
 };

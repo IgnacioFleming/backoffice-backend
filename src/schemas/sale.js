@@ -9,7 +9,7 @@ export const saleSchema = z.object({
     .object({
       product_id: z.number().int().positive(),
       quantity: z.number().int().positive(),
-      amount: z.number().int().nonnegative(),
+      amount: z.number().nonnegative(),
     })
     .array()
     .optional(),
