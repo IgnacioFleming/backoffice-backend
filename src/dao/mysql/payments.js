@@ -7,12 +7,10 @@ export default class PaymentsManager {
     let connection;
     try {
       connection = await pool.getConnection();
-      await connection.beginTransaction();
       const [payload] = await pool.execute("INSERT INTO payments (costumer_id, payment_amount) VALUES (?,?)", [body.costumer_id, -body.payment_amount]);
       await BalancesManager.addDebitCredit(body.costumer_id, -body.payment_amount, connection);
       return { payload };
     } catch (error) {
-      if (connection) connection.rollback();
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);
     } finally {
       if (connection) connection.release();

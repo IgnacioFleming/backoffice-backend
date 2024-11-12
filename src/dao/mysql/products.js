@@ -71,19 +71,22 @@ export default class ProductsManager {
     }
   }
   static async updateProductStock(product_id, stock_update, connection) {
+    let dbClient;
     try {
-      const dbClient = connection || (await pool.getConnection());
+      console.log(product_id, stock_update);
+      dbClient = connection || (await pool.getConnection());
       const [result] = await dbClient.execute(
         `
         UPDATE products SET stock = stock + ? WHERE id = ?
         `,
         [stock_update, product_id]
       );
+      console.log(result);
       return result;
     } catch (error) {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);
     } finally {
-      if (dbClient) dbClient.release();
+      if (!connection && dbClient) dbClient.release();
     }
   }
 }
