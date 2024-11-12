@@ -6,4 +6,5 @@ export const orderSchema = z.object({
   product_id: z.number().int().positive(),
   quantity: z.number().int().positive(),
   amount: z.number().nonnegative(),
+  order_cost: z.number().nonnegative().optional(),
 });

@@ -43,10 +43,12 @@ const costumersBodyHandler = (req) => {
 
 const productsBodyHandler = (req) => {
   const { body } = req;
-  body.price = parseFloat(body.price);
+  body.price = Number(body.price);
   body.stock = parseInt(body.stock);
+  body.cost = Number(body.cost);
   req.fileURL && (body.thumbnail = req.fileURL);
   req.imgPublicId && (body.thumbnail_public_id = req.imgPublicId);
+  console.log(body);
   return body;
 };
 

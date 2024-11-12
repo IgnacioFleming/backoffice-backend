@@ -6,7 +6,7 @@ import SalesManager from "./sales.js";
 export default class OrdersManager {
   static async getAll() {
     try {
-      const [orders] = await pool.query("SELECT orders.id ,orders.sale_id, products.name, products.price, orders.quantity, orders.amount, products.category FROM orders INNER JOIN products ON orders.product_id = products.id ORDER BY orders.id ASC");
+      const [orders] = await pool.query("SELECT orders.id ,orders.sale_id, products.name, products.price, orders.quantity, orders.amount,orders.order_cost, products.category FROM orders INNER JOIN products ON orders.product_id = products.id ORDER BY orders.id ASC");
       return { payload: orders };
     } catch (error) {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(error, null, 2));
@@ -24,7 +24,7 @@ export default class OrdersManager {
 
   static async getByOrderNumber(sale_id) {
     try {
-      const [orders] = await pool.execute("SELECT orders.id ,orders.sale_id, products.name, products.price, orders.quantity, orders.amount, products.category FROM orders INNER JOIN products ON orders.product_id = products.id WHERE orders.sale_id = ? ORDER BY orders.id ASC", [sale_id]);
+      const [orders] = await pool.execute("SELECT orders.id ,orders.sale_id, products.name, products.price, orders.quantity, orders.amount,orders.order_cost, products.category FROM orders INNER JOIN products ON orders.product_id = products.id WHERE orders.sale_id = ? ORDER BY orders.id ASC", [sale_id]);
       return { payload: orders };
     } catch (error) {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(error, null, 2));
@@ -77,10 +77,29 @@ export default class OrdersManager {
 
   static async create(data) {
     try {
-      await pool.query("INSERT INTO orders (sale_id, product_id, quantity, amount) VALUES(?,?,?,?)", [data.sale_id, data.product_id, data.quantity, data.amount]);
+      await pool.execute("INSERT INTO orders (sale_id, product_id, quantity, amount,order_cost) VALUES(?,?,?,?,?)", [data.sale_id, data.product_id, data.quantity, data.amount, data.order_cost]);
       return { payload: "Order created." };
     } catch (error) {
-      throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(error, null, 2));
+      throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);
+    }
+  }
+
+  static async getOrdersByProductId(product_id) {
+    try {
+      const [orders] = await pool.execute("SELECT id,sale_id, quantity FROM orders WHERE product_id = ?", [product_id]);
+      return { payload: orders };
+    } catch (error) {
+      throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);
+    }
+  }
+  static async updateOrderCost(order_id, cost) {
+    let connection;
+    try {
+      connection = await pool.getConnection();
+      const [update] = await connection.execute("UPDATE orders SET order_cost = ? WHERE id = ?", [cost, order_id]);
+      return { payload: update };
+    } catch (error) {
+      throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);
     }
   }
 }
