@@ -12,10 +12,9 @@ export const strategies = {
   RESTORE_PASSWORD: "restore_password",
   AUTH: "auth",
 };
-
 const adminUser = {
   id: config.admin_keys.admin_id,
-  username: config.admin_keys.admin_user,
+  username: config.admin_keys.admin_username,
   first_name: "Usuario Administrador",
   last_name: "",
   email: "",
