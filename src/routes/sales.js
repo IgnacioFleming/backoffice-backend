@@ -6,3 +6,4 @@ saleRouter.use(auth);
 saleRouter.get("/", salesController.getAll);
 saleRouter.post("/", salesController.create);
 saleRouter.delete("/:id", salesController.deleteSale);
+saleRouter.get("/monthlySales", salesController.getMonthlySales);

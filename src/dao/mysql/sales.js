@@ -85,4 +85,18 @@ export default class SalesManager {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);
     }
   }
+
+  static async getThisMonthSales() {
+    try {
+      const [monthlySales] = await pool.query(`
+        SELECT SUM(total_amount) AS total_amount_per_day, DAY(sale_date) AS sale_day, MONTH(sale_date) AS sale_month
+        FROM sales
+        WHERE sale_date >= NOW() - INTERVAL 1 MONTH
+        GROUP BY sale_day, sale_month;
+        `);
+      return { payload: monthlySales };
+    } catch (error) {
+      throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);
+    }
+  }
 }
