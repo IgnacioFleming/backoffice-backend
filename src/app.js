@@ -22,7 +22,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 app.use(cors(corsOptions));
 app.use(cookieParser(config.session.secret));
-app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000, httpOnly: false }, resave: false, saveUninitialized: false }));
+app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000, httpOnly: false, sameSite: "none", secure: true, domain: "https://backoffice-backend-production.up.railway.app" }, resave: false, saveUninitialized: false }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());
