@@ -39,7 +39,6 @@ export default class CostumersManager {
   static async create(data) {
     try {
       const [newCostumer] = await pool.execute("INSERT INTO costumers (name, account_number, logo, logo_public_id) VALUES(?,?,?,?);", [data.name, data.account_number, data.logo || null, data.logo_public_id || null]);
-      console.log(newCostumer);
       await BalancesManager.create({ costumer_id: newCostumer.insertId });
       return { payload: newCostumer };
     } catch (error) {
