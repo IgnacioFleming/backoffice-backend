@@ -1,6 +1,7 @@
 import SalesManager from "../dao/mysql/sales.js";
 import { saleSchema } from "../schemas/sale.js";
 import controllerHandlers from "../utils/controllerHandlers.js";
+import responses from "../utils/responses.js";
 import { modelMethods } from "../utils/utils.js";
 
 const getAll = async (req, res, next) => {
@@ -29,8 +30,18 @@ const deleteSale = async (req, res, next) => {
   }
 };
 
+const getMonthlySales = async (req, res, next) => {
+  try {
+    const { payload } = await SalesManager.getThisMonthSales();
+    responses.successResponse(res, payload);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getAll,
   create,
   deleteSale,
+  getMonthlySales,
 };
