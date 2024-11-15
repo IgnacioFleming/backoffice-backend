@@ -20,7 +20,7 @@ import { paymentsRouter } from "./routes/payments.js";
 
 const app = express();
 app.use(cors(corsOptions));
-app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000, sameSite: "none" }, resave: true, saveUninitialized: false }));
+app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000, sameSite: "none", secure: true }, resave: true, saveUninitialized: false }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());
