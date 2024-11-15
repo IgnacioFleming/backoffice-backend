@@ -13,12 +13,12 @@ export const passportCall = (strategy) => {
         const error = createCustomError(ERRORS.AUTH, info?.message);
         return next(error);
       }
-      console.log(user);
-      console.log(req.user);
-      console.log(req.session);
+      console.log("user que llega al passportCall", user);
 
       req.user = user;
+      console.log("req decorado con el user", req.user);
       req.session.passport = { user: { id: user.id } };
+      console.log(req.session);
       req.isAuthenticated = () => req.session.passport.user && true;
       console.log(req.isAuthenticated());
       next();
