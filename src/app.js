@@ -16,6 +16,7 @@ import { movementsRouter } from "./routes/movements.js";
 import { usersRouter } from "./routes/users.js";
 import { errorHandler } from "./middlewares/errors/errorHandler.js";
 import { unhandledRejection } from "./middlewares/errors/unhadledRejection.js";
+import { paymentsRouter } from "./routes/payments.js";
 
 const app = express();
 app.use(cors(corsOptions));
@@ -33,6 +34,7 @@ app.use("/api/sessions", sessionRouter);
 app.use("/api/balances", balancesRouter);
 app.use("/api/movements", movementsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/payments", paymentsRouter);
 
 app.use(errorHandler);
 

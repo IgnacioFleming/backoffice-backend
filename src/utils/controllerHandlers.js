@@ -52,6 +52,12 @@ const productsBodyHandler = (req) => {
   return body;
 };
 
+const paymentsBodyHandler = (req) => {
+  const { body } = req;
+  const { costumer_id, payment_amount } = body;
+  return { costumer_id, payment_amount: payment_amount * -1 };
+};
+
 const salesBodyHandler = (req) => {
   const { body } = req;
   const { products } = body;
@@ -108,4 +114,5 @@ export default {
   deleteResource,
   callModelAndRespond,
   salesBodyHandler,
+  paymentsBodyHandler,
 };

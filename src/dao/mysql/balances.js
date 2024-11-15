@@ -19,21 +19,23 @@ export default class BalancesManager {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(error, null, 2));
     }
   }
-  static async addCredit(costumer_id, amount) {
+  static async addDebitCredit(costumer_id, amount, connection) {
+    const dbClient = connection || pool;
     try {
-      const [newCredit] = await pool.execute("UPDATE balances SET balance_amount = balance_amount + ? WHERE costumer_id = ?", [amount, costumer_id]);
+      const [newCredit] = await dbClient.execute("UPDATE balances SET balance_amount = balance_amount + ? WHERE costumer_id = ?", [amount, costumer_id]);
       return { payload: newCredit };
     } catch (error) {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(error, null, 2));
     }
   }
 
-  static async addDebit(costumer_id, amount) {
-    try {
-      const [newCredit] = await pool.execute("UPDATE balances SET balance_amount = balance_amount - ? WHERE costumer_id = ?", [amount, costumer_id]);
-      return { payload: newCredit };
-    } catch (error) {
-      throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(error, null, 2));
-    }
-  }
+  // static async addCredit(costumer_id, amount, connection) {
+  //   const dbClient = connection || pool;
+  //   try {
+  //     const [newCredit] = await dbClient.execute("UPDATE balances SET balance_amount = balance_amount - ? WHERE costumer_id = ?", [amount, costumer_id]);
+  //     return { payload: newCredit };
+  //   } catch (error) {
+  //     throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(error, null, 2));
+  //   }
+  // }
 }

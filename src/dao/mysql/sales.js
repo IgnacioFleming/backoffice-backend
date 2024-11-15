@@ -1,9 +1,7 @@
 import { pool } from "../../config/dbconfig-mysql.js";
-import { recalculateSaleCostAndItemsHelper } from "../../utils/dbHelpers/helpers.js";
 import { createCustomError } from "../../utils/errors/errorFactory.js";
 import { ERRORS } from "../../utils/errors/errorTypes.js";
 import BalancesManager from "./balances.js";
-import OrdersManager from "./orders.js";
 import ProductsManager from "./products.js";
 export default class SalesManager {
   static async getAll() {
@@ -24,18 +22,17 @@ export default class SalesManager {
     }
   }
 
-  static async delete(id) {
-    let connection;
+  static async delete(id, connection) {
     try {
-      connection = await pool.getConnection();
+      let dbClient = connection || (await pool.getConnection());
       const { payload: sale } = await this.getById(id);
-      const [payload] = await connection.execute("DELETE FROM sales WHERE id =?", [id]);
-      await BalancesManager.addDebit(sale.costumer_id, sale.total_amount);
+      const [payload] = await dbClient.execute("DELETE FROM sales WHERE id =?", [id]);
+      await BalancesManager.addDebitCredit(sale.costumer_id, -sale.total_amount);
       return { payload };
     } catch (error) {
       throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
     } finally {
-      if (connection) connection.release();
+      if (dbClient) dbClient.release();
     }
   }
   static async create(data) {
@@ -56,13 +53,12 @@ export default class SalesManager {
           const order_cost = cost * quantity;
           sale_cost += order_cost;
           sale_items_quantity += quantity;
-          //creo las ordenes
           const [result] = await connection.execute("INSERT INTO orders (sale_id, product_id, quantity, amount,order_cost) VALUES(?,?,?,?,?)", [sale_id, product_id, quantity, amount, order_cost]);
           console.log(result);
         })
       );
-      await recalculateSaleCostAndItemsHelper(connection, sale_id);
-      await BalancesManager.addCredit(data.costumer_id, data.total_amount);
+      await this.recalculateSaleData(sale_id, connection);
+      await BalancesManager.addDebitCredit(data.costumer_id, data.total_amount);
       await connection.commit();
       return { payload: "The transaction was completed successfully" };
     } catch (error) {
@@ -73,9 +69,11 @@ export default class SalesManager {
     }
   }
 
-  static async recalculateSaleCostAndItemsQuantity(sale_id) {
+  static async recalculateSaleData(sale_id, connection) {
+    const dbClient = connection || pool;
     try {
-      const result = await recalculateSaleCostAndItemsHelper(pool, sale_id);
+      const [[{ total_cost, total_quantity, total_amount }]] = await dbClient.execute("SELECT sum(order_cost) as total_cost, sum(quantity) as total_quantity, sum(amount) as total_amount FROM orders WHERE sale_id = ?", [sale_id]);
+      const [result] = await connection.execute("UPDATE sales SET sale_cost = ?,items_quantity = ?, total_amount = ? WHERE id = ?", [total_cost, total_quantity, total_amount, sale_id]);
       return { payload: result };
     } catch (error) {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);
