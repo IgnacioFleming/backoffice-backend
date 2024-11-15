@@ -17,15 +17,23 @@ import { usersRouter } from "./routes/users.js";
 import { errorHandler } from "./middlewares/errors/errorHandler.js";
 import { unhandledRejection } from "./middlewares/errors/unhadledRejection.js";
 import { paymentsRouter } from "./routes/payments.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(cors(corsOptions));
+app.use(cookieParser());
 app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000, httpOnly: true }, resave: false, saveUninitialized: false }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 initializePassport();
+app.use((req, res, next) => {
+  console.log("Cookies:", req.cookies);
+  console.log("Session ID from cookie:", req.sessionID);
+  next();
+});
+
 app.use("/api/products", productsRouter);
 app.use("/api/costumers", costumerRouter);
 app.use("/api/orders", orderRouter);
