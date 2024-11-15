@@ -20,7 +20,7 @@ import { paymentsRouter } from "./routes/payments.js";
 
 const app = express();
 app.use(cors(corsOptions));
-app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000 }, resave: true, saveUninitialized: false }));
+app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000, sameSite: "none" }, resave: true, saveUninitialized: false }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());
@@ -38,8 +38,8 @@ app.use("/api/payments", paymentsRouter);
 
 app.use(errorHandler);
 
-// process.on("uncaughtException", unhandledRejection);
-// process.on("unhandledRejection", unhandledRejection);
+process.on("uncaughtException", unhandledRejection);
+process.on("unhandledRejection", unhandledRejection);
 
 const PORT = process.env.PORT || 8080;
 
