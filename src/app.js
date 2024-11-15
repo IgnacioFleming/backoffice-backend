@@ -22,7 +22,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000, secure: true, sameSite: "none" }, resave: false, saveUninitialized: false }));
+app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000 }, resave: false, saveUninitialized: false }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());
