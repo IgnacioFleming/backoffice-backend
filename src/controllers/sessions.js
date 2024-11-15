@@ -3,7 +3,7 @@ import sendEmail from "../services/email/index.js";
 import { emailTemplates } from "../services/email/templates/index.js";
 import responses from "../utils/responses.js";
 
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
   try {
     const user = new UserDto(req.user);
     const destinationEmail = user.email;
@@ -16,7 +16,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
   try {
     const user = new UserDto(req.user);
     responses.successResponse(res, user);
@@ -25,7 +25,7 @@ const loginUser = async (req, res) => {
   }
 };
 
-const logOutUser = async (req, res) => {
+const logOutUser = async (req, res, next) => {
   try {
     req.session.destroy();
     responses.successResponse(res, "Logged out.");
@@ -34,7 +34,7 @@ const logOutUser = async (req, res) => {
   }
 };
 
-const checkSession = async (req, res) => {
+const checkSession = async (req, res, next) => {
   try {
     const user = new UserDto(req.user);
     responses.successResponse(res, user);
