@@ -114,7 +114,6 @@ export default class OrdersManager {
       dbClient = connection || (await pool.getConnection());
       const [[{ cost }]] = await dbClient.execute("SELECT cost FROM products WHERE id = ?", [order.product_id]);
       const [update] = await dbClient.execute("UPDATE orders SET order_cost = ? WHERE id = ?", [cost * quantity, order.id]);
-      console.log(update);
       return { payload: update };
     } catch (error) {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);

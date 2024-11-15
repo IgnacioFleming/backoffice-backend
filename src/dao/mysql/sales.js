@@ -47,7 +47,6 @@ export default class SalesManager {
       await connection.beginTransaction();
       //creo la venta con items y monto en cero
       const [result] = await connection.execute("INSERT INTO sales (costumer_id, items_quantity, total_amount,sale_cost) VALUES(?,?,?,?)", [data.costumer_id, 0, data.total_amount, 0]);
-      console.log(result, "venta");
       const sale_id = result.insertId;
       //
       let sale_cost = 0;
@@ -59,8 +58,6 @@ export default class SalesManager {
           sale_cost += order_cost;
           sale_items_quantity += quantity;
           await OrdersManager.create({ sale_id, product_id, quantity, amount, order_cost }, connection);
-          // const [result] = await connection.execute("INSERT INTO orders (sale_id, product_id, quantity, amount,order_cost) VALUES(?,?,?,?,?)", [sale_id, product_id, quantity, amount, order_cost]);
-          // console.log(result);
         })
       );
       await this.recalculateSaleData(sale_id, connection);

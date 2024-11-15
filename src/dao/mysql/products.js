@@ -73,7 +73,6 @@ export default class ProductsManager {
   static async updateProductStock(product_id, stock_update, connection) {
     let dbClient;
     try {
-      console.log(product_id, stock_update);
       dbClient = connection || (await pool.getConnection());
       const [result] = await dbClient.execute(
         `
@@ -81,7 +80,6 @@ export default class ProductsManager {
         `,
         [stock_update, product_id]
       );
-      console.log(result);
       return result;
     } catch (error) {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, error);

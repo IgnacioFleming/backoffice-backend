@@ -48,7 +48,6 @@ const productsBodyHandler = (req) => {
   body.cost = Number(body.cost);
   req.fileURL && (body.thumbnail = req.fileURL);
   req.imgPublicId && (body.thumbnail_public_id = req.imgPublicId);
-  console.log(body);
   return body;
 };
 
@@ -61,7 +60,6 @@ const paymentsBodyHandler = (req) => {
 const salesBodyHandler = (req) => {
   const { body } = req;
   const { products } = body;
-  console.log(products);
   const parsedBody = {};
   parsedBody.product_id = parseInt(products.product_id);
   parsedBody.quantity = parseInt(products.quantity);

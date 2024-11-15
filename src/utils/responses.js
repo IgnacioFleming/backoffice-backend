@@ -10,14 +10,12 @@ const successResponse = (res, payload = "OK", status = 200) => {
 };
 
 const clientErrorResponse = (res, error = "Bad Request", status = 400) => {
-  console.log("client error response", error);
   return res.status(status).json({
     status: statusTypes.ERROR,
     error,
   });
 };
 const serverErrorResponse = (res, error = "Internal Server Error", status = 500) => {
-  console.log("server error response", error);
   return res.status(status).json({
     status: statusTypes.ERROR,
     error,
@@ -25,7 +23,6 @@ const serverErrorResponse = (res, error = "Internal Server Error", status = 500)
 };
 
 const notFoundResponse = (res, error = "Resource not found", status = 404) => {
-  console.log("notFound response", error);
   return res.status(status).json({
     status: statusTypes.NOT_FOUND,
     error,
@@ -33,7 +30,6 @@ const notFoundResponse = (res, error = "Resource not found", status = 404) => {
 };
 
 const unauthorizedResponse = (res, error = "Unauthorized", status = 401) => {
-  console.log("unauthorized response", error);
   return res.status(status).json({
     status: statusTypes.UNAUTHORIZED,
     error,
