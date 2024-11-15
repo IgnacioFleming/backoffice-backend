@@ -2,6 +2,7 @@ import { pool } from "../../config/dbconfig-mysql.js";
 import { createCustomError } from "../../utils/errors/errorFactory.js";
 import { ERRORS } from "../../utils/errors/errorTypes.js";
 import BalancesManager from "./balances.js";
+import OrdersManager from "./orders.js";
 import ProductsManager from "./products.js";
 export default class SalesManager {
   static async getAll() {
@@ -23,16 +24,20 @@ export default class SalesManager {
   }
 
   static async delete(id, connection) {
+    let dbClient;
     try {
-      let dbClient = connection || (await pool.getConnection());
-      const { payload: sale } = await this.getById(id);
+      dbClient = connection || (await pool.getConnection());
+      if (!connection) await dbClient.beginTransaction();
+      const { payload: orders } = await OrdersManager.getByOrderNumber(id, connection);
+      await Promise.all(orders.map(async (order) => await OrdersManager.delete(order.id, connection)));
       const [payload] = await dbClient.execute("DELETE FROM sales WHERE id =?", [id]);
-      await BalancesManager.addDebitCredit(sale.costumer_id, -sale.total_amount);
+      if (!connection) await dbClient.commit();
       return { payload };
     } catch (error) {
+      if (!connection && dbClient) await dbClient.rollback();
       throw err.sqlMessage ? createCustomError(ERRORS.DATABASE, err.sqlMessage) : reateCustomError(ERRORS.UNHANDLED, JSON.stringify(err, null, 2));
     } finally {
-      if (dbClient) dbClient.release();
+      if (!connection && dbClient) dbClient.release();
     }
   }
   static async create(data) {
@@ -53,8 +58,9 @@ export default class SalesManager {
           const order_cost = cost * quantity;
           sale_cost += order_cost;
           sale_items_quantity += quantity;
-          const [result] = await connection.execute("INSERT INTO orders (sale_id, product_id, quantity, amount,order_cost) VALUES(?,?,?,?,?)", [sale_id, product_id, quantity, amount, order_cost]);
-          console.log(result);
+          await OrdersManager.create({ sale_id, product_id, quantity, amount, order_cost }, connection);
+          // const [result] = await connection.execute("INSERT INTO orders (sale_id, product_id, quantity, amount,order_cost) VALUES(?,?,?,?,?)", [sale_id, product_id, quantity, amount, order_cost]);
+          // console.log(result);
         })
       );
       await this.recalculateSaleData(sale_id, connection);

@@ -6,4 +6,5 @@ export const ERRORS = {
   INVALID_BODY: { defaultMessage: "The body provided is invalid", defaultStatusCode: 400, name: "invalid_body" },
   NO_ID: { defaultMessage: "There was no Id provided", defaultStatusCode: 400, name: "no_id" },
   UPLOAD_FILE: { defaultMessage: "There was an error while uploading the file", defaultStatusCode: 400, name: "upload_file" },
+  AUTH: { defaultMessage: "User or Password are not valid.", defaultStatusCode: 400, name: "auth" },
 };

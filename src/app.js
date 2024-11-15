@@ -38,8 +38,8 @@ app.use("/api/payments", paymentsRouter);
 
 app.use(errorHandler);
 
-process.on("uncaughtException", unhandledRejection);
-process.on("unhandledRejection", unhandledRejection);
+// process.on("uncaughtException", unhandledRejection);
+// process.on("unhandledRejection", unhandledRejection);
 
 const PORT = process.env.PORT || 8080;
 

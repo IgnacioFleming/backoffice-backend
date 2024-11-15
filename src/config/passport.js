@@ -30,12 +30,14 @@ const initializePassport = () => {
     new LocalStrategy({ passReqToCallback: true, session: true }, async (req, username, password, done) => {
       try {
         const { body } = req;
+        const user = await UsersManager.getByUsername(username);
+        if (user.payload) return done(null, false, { message: "User already exists." });
         const hashedPassword = await createHash(password);
         const { success, data, error } = userSchema.safeParse({ ...body, id: 1, role: userRoles.READER, is_enabled: false, password: hashedPassword });
         if (!success) return done(error);
         const newUser = await UsersManager.create(data);
 
-        if (newUser.status === "success") {
+        if (newUser.payload) {
           return done(null, newUser.payload);
         } else {
           return done(null, false, { message: newUser.error });
@@ -50,10 +52,10 @@ const initializePassport = () => {
     strategies.LOGIN,
     new LocalStrategy(async (username, password, done) => {
       try {
-        if (username === config.admin_keys.admin_username && password === config.admin_keys.admin_pwd) {
-          return done(null, adminUser);
+        if (username === config.admin_keys.admin_username) {
+          if (password === config.admin_keys.admin_pwd) return done(null, adminUser);
+          return done(null, false, { message: "Invalid password." });
         }
-
         const user = await UsersManager.getByUsername(username);
         if (!user.payload) return done(null, false, { message: "User not found." });
         const validation = await isValidPassword(password, user.payload);
