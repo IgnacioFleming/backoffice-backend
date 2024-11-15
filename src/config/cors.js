@@ -1,6 +1,5 @@
 import config from "./config.js";
 const whitelist = [config.urls.local_client_url, config.urls.develop_client_url, undefined];
-console.log(config.urls.local_client_url, config.urls.develop_client_url);
 export const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
