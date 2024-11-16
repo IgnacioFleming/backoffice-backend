@@ -30,8 +30,8 @@ app.use(passport.session());
 initializePassport();
 
 app.get("/", async (req, res) => {
-  if (req.cookies[cookiePrueba]) return res.send({ payload: req.cookies });
   console.log("no recibi la cookie ", req.cookies[cookiePrueba]);
+  if (req.cookies[cookiePrueba]) return res.send({ payload: req.cookies });
   res.send("No recibo la cookie");
 });
 app.get("/setCookie", async (req, res) => {
