@@ -28,10 +28,13 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 initializePassport();
-app.use((req, res, next) => {
-  console.log("Cookies:", req.cookies);
-  console.log("Session ID from cookie:", req.sessionID);
-  next();
+
+app.get("/", async (req, res) => {
+  if (req.cookies) return res.send({ payload: req.cookies });
+  res.send("No recibo la cookie");
+});
+app.get("/setCookie", async (req, res) => {
+  res.cookie("cookiePrueba", "Esta es una prueba de que la puta cookie funciona").send("cookie seteada");
 });
 
 app.use("/api/products", productsRouter);
