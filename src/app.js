@@ -18,7 +18,6 @@ import { errorHandler } from "./middlewares/errors/errorHandler.js";
 import { unhandledRejection } from "./middlewares/errors/unhadledRejection.js";
 import { paymentsRouter } from "./routes/payments.js";
 import cookieParser from "cookie-parser";
-console.log(config.enviroment);
 const app = express();
 app.use(cors(corsOptions));
 app.use(cookieParser(config.session.secret));
