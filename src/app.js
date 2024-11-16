@@ -30,15 +30,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 initializePassport();
 
-app.get("/", async (req, res) => {
-  console.log("no recibi la cookie ", req.cookies[cookiePrueba]);
-  if (req.cookies[cookiePrueba]) return res.send({ payload: req.cookies });
-  res.send("No recibo la cookie");
-});
-app.get("/setCookie", async (req, res) => {
-  res.cookie("cookiePrueba", "Esta es una prueba de que la puta cookie funciona").send("cookie seteada");
-});
-
 app.use("/api/products", productsRouter);
 app.use("/api/costumers", costumerRouter);
 app.use("/api/orders", orderRouter);

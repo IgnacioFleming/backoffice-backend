@@ -52,7 +52,6 @@ const initializePassport = () => {
     new LocalStrategy(async (username, password, done) => {
       try {
         if (username === config.admin_keys.admin_username) {
-          console.log("adminUser y pass", username, password, config.admin_keys.admin_username, config.admin_keys.admin_pwd);
           if (password === config.admin_keys.admin_pwd) return done(null, adminUser);
           return done(null, false, { message: "Invalid password." });
         }
@@ -88,11 +87,9 @@ const initializePassport = () => {
   // );
 
   passport.serializeUser((user, done) => {
-    console.log("Serializing user:", user);
     done(null, user.id);
   });
   passport.deserializeUser(async ({ id }, done) => {
-    console.log("Deserializing user with ID:", id);
     if (id === adminUser.id) return done(null, adminUser);
     const user = await UsersManager.getById(id);
     done(null, user.payload);
