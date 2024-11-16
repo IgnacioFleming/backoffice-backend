@@ -88,6 +88,8 @@ export default class OrdersManager {
     try {
       dbClient = connection || (await pool.getConnection());
       if (!connection) await dbClient.beginTransaction();
+      const [[{ stock }]] = await dbClient.execute("SELECT stock FROM products WHERE id = ?", [data.product_id]);
+      if (data.quantity - stock < 0) return { error: "There is not sufficient stock of this product." };
       await dbClient.execute("INSERT INTO orders (sale_id, product_id, quantity, amount,order_cost) VALUES(?,?,?,?,?)", [data.sale_id, data.product_id, data.quantity, data.amount, data.order_cost]);
       await ProductsManager.updateProductStock(data.product_id, -data.quantity, connection);
       if (!connection) await dbClient.commit();
