@@ -20,7 +20,13 @@ import { paymentsRouter } from "./routes/payments.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  })
+);
 app.use(cookieParser(config.session.secret));
 app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000, httpOnly: false }, resave: false, saveUninitialized: false }));
 app.use(express.urlencoded({ extended: true }));
