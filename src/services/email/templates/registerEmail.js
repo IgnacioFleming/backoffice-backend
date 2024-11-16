@@ -19,7 +19,7 @@ export const registerEmailTemplate = (username) => {
               <tbody>
                 <tr>
                   <td align="center" style="padding: 30px 0">
-                    <img src="https://www.zarla.com/images/zarla-botica-de-la-ocho-1x1-2400x2400-20220404-qqb9hbbdg7rjvwdc83gv.png?crop=1:1,smart&width=250&dpr=2" width="100" style="border: none; width: 50px; font: bold 16px/20px Arial, Helvetica, sans-serif; color: #000; vertical-align: top" alt="Webflow" class="CToWUd" data-bit="iit" />
+                    <img src="https://res.cloudinary.com/dah7yxmc5/image/upload/v1729266657/Business-manager/logo-with-caption_dwtzyf.png" width="100" style="border: none; width: 50px; font: bold 16px/20px Arial, Helvetica, sans-serif; color: #000; vertical-align: top" alt="Webflow" class="CToWUd" data-bit="iit" />
                   </td>
                 </tr>
                 <tr>
@@ -28,7 +28,7 @@ export const registerEmailTemplate = (username) => {
                       <tbody>
                         <tr>
                           <td class="m_8537046614505610192wi-100p" align="center" style="overflow: hidden">
-                            <img src="https://res.cloudinary.com/dah7yxmc5/image/upload/v1729167487/Business-manager/salud-ciencia-medica-elegante_1419-2183_srdzsm_fghvmf.webp" width="600" style="border: none; width: 600px; font: 700 16px/20px Arial, Helvetica, sans-serif; color: #000; vertical-align: top; height: auto" alt="" class="CToWUd" data-bit="iit" />
+                            <img src="https://res.cloudinary.com/dah7yxmc5/image/upload/v1731953248/Business-manager/email-img_nr6r8p.webp" width="600" style="border: none; width: 600px; font: 700 16px/20px Arial, Helvetica, sans-serif; color: #000; vertical-align: top; height: auto" alt="" class="CToWUd" data-bit="iit" />
                           </td>
                         </tr>
                         <tr>

@@ -1,6 +1,7 @@
 import { pool } from "../../config/dbconfig-mysql.js";
 import { createCustomError } from "../../utils/errors/errorFactory.js";
 import { ERRORS } from "../../utils/errors/errorTypes.js";
+import { defaultImages } from "../../utils/utils.js";
 import BalancesManager from "./balances.js";
 export default class CostumersManager {
   static async getAll() {
@@ -38,7 +39,7 @@ export default class CostumersManager {
   }
   static async create(data) {
     try {
-      const [newCostumer] = await pool.execute("INSERT INTO costumers (name, account_number, logo, logo_public_id) VALUES(?,?,?,?);", [data.name, data.account_number, data.logo || null, data.logo_public_id || null]);
+      const [newCostumer] = await pool.execute("INSERT INTO costumers (name, account_number, logo, logo_public_id) VALUES(?,?,?,?);", [data.name, data.account_number, data.logo || defaultImages.defaultCostumerImgUrl, data.logo_public_id || null]);
       await BalancesManager.create({ costumer_id: newCostumer.insertId });
       return { payload: newCostumer };
     } catch (error) {

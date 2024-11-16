@@ -1,9 +1,7 @@
 import { pool } from "../../config/dbconfig-mysql.js";
-import CustomError from "../../utils/errors/customError.js";
 import { createCustomError } from "../../utils/errors/errorFactory.js";
 import { ERRORS } from "../../utils/errors/errorTypes.js";
-import OrdersManager from "./orders.js";
-import SalesManager from "./sales.js";
+import { defaultImages } from "../../utils/utils.js";
 export default class ProductsManager {
   static async getAll() {
     try {
@@ -47,7 +45,7 @@ export default class ProductsManager {
   }
   static async create(data) {
     try {
-      const [payload] = await pool.query("INSERT INTO products (name, price,cost, stock, category, description, thumbnail, thumbnail_public_id) VALUES(?,?,?,?,?,?,?)", [data.name, data.price, data.cost, data.stock, data.category, data.description, data.thumbnail, data.thumbnail_public_id]);
+      const [payload] = await pool.query("INSERT INTO products (name, price,cost, stock, category, description, thumbnail, thumbnail_public_id) VALUES(?,?,?,?,?,?,?,?)", [data.name, data.price, data.cost, data.stock, data.category, data.description, data.thumbnail || defaultImages.defaultProductImgUrl, data.thumbnail_public_id || null]);
       return { payload };
     } catch (error) {
       throw error.sqlMessage ? createCustomError(ERRORS.DATABASE, error.sqlMessage) : createCustomError(ERRORS.UNHANDLED, JSON.stringify(error, null, 2));

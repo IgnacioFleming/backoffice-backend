@@ -18,11 +18,11 @@ import { errorHandler } from "./middlewares/errors/errorHandler.js";
 import { unhandledRejection } from "./middlewares/errors/unhadledRejection.js";
 import { paymentsRouter } from "./routes/payments.js";
 import cookieParser from "cookie-parser";
-
+console.log(config.enviroment);
 const app = express();
 app.use(cors(corsOptions));
 app.use(cookieParser(config.session.secret));
-app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000, httpOnly: true, sameSite: "none", secure: true }, resave: false, saveUninitialized: false }));
+app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000, httpOnly: true, sameSite: config.enviroment === "production" ? "none" : "lax", secure: config.enviroment === "production" }, resave: false, saveUninitialized: false }));
 app.set("trust proxy", 1);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

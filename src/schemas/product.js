@@ -8,8 +8,8 @@ export const productSchema = z.object({
   stock: z.number().int().nonnegative(),
   category: z.string().max(50),
   description: z.string(),
-  thumbnail: z.string().url(),
-  thumbnail_public_id: z.string().nullable(),
+  thumbnail: z.string().url().nullable().optional(),
+  thumbnail_public_id: z.string().nullable().optional(),
 });
 
 export const productSchemaOptional = productSchema.partial({ thumbnail_public_id: true, thumbnail: true });
