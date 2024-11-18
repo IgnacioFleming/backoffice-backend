@@ -1,7 +1,7 @@
 import CustomError from "./errors/customError.js";
 import { createCustomError } from "./errors/errorFactory.js";
 import { ERRORS } from "./errors/errorTypes.js";
-import responses, { statusTypes } from "./responses.js";
+import responses from "./responses.js";
 import { destroyFile } from "./utils.js";
 
 const validateBody = async (body = {}, schema) => {
@@ -85,7 +85,6 @@ const getResourcesById = async (dao, id) => {
     return { payload };
   } catch (error) {
     if (error instanceof CustomError) throw error;
-    await destroyFile(body.thumbnail_public_id || body.logo_public_id);
     throw createCustomError(ERRORS.UNHANDLED, JSON.stringify(error));
   }
 };
@@ -98,7 +97,6 @@ const deleteResource = async (req, res, dao) => {
     return responses.successResponse(res, payload);
   } catch (error) {
     if (error instanceof CustomError) throw error;
-    await destroyFile(body.thumbnail_public_id || body.logo_public_id);
     throw createCustomError(ERRORS.UNHANDLED, JSON.stringify(error));
   }
 };

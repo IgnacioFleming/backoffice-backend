@@ -61,7 +61,7 @@ export default class SalesManager {
       );
 
       await this.recalculateSaleData(sale_id, connection);
-      await BalancesManager.addDebitCredit(data.costumer_id, data.total_amount);
+      await BalancesManager.addDebitCredit(data.costumer_id, data.total_amount, connection);
       await connection.commit();
       return { payload: "The transaction was completed successfully" };
     } catch (error) {
