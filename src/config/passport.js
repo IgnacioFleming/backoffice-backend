@@ -87,7 +87,7 @@ const initializePassport = () => {
   // );
 
   passport.serializeUser((user, done) => {
-    console.log(user);
+    console.log(user, "usuario serializado");
     done(null, user.id);
   });
   passport.deserializeUser(async (id, done) => {
