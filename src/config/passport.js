@@ -97,7 +97,7 @@ const initializePassport = () => {
     console.log((id?.id ?? id) === adminUser.id);
     if ((id?.id ?? id) === adminUser.id) return done(null, adminUser);
     const user = await UsersManager.getById(id);
-    console.log(user);
+    console.log(user, "usuario no admin");
     done(null, user.payload);
   });
 };
