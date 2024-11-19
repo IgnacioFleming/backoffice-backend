@@ -4,9 +4,10 @@
   "description": "System to manage a commercial business",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js prod",
-    "dev": "node --watch  src/app.js dev"
+    "test": "cross-env NODE_ENV=test jest --watch --detectOpenHandles",
+    "lint": "eslint .",
+    "start": "cross-env NODE_ENV=production node src/app.js",
+    "dev": "cross-env NODE_ENV=development node --watch  src/app.js"
   },
   "author": "Ignacio Fleming",
   "license": "ISC",
@@ -14,8 +15,9 @@
   "dependencies": {
     "bcrypt": "5.1.1",
     "cloudinary": "2.5.1",
-    "cookie-parser": "^1.4.7",
+    "cookie-parser": "1.4.7",
     "cors": "2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "16.4.5",
     "express": "4.21.0",
     "express-mysql-session": "3.0.3",
@@ -30,7 +32,9 @@
   "devDependencies": {
     "@faker-js/faker": "9.0.3",
     "eslint": "8.57.1",
-    "standard": "17.1.2"
+    "jest": "^29.7.0",
+    "standard": "17.1.2",
+    "supertest": "7.0.0"
   },
   "eslintConfig": {
     "extends": "./node_modules/standard/eslintrc.json"

@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 
-const enviroment = process.argv[2] === "dev" ? "develop" : "production";
+// const enviroment = process.argv[2] === "dev" ? "develop" : "production";
 
-dotenv.config({ path: enviroment === "develop" ? ".env.develop" : ".env" });
+dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env" : ".env.develop" });
 
 export default {
   urls: {
@@ -22,7 +22,8 @@ export default {
       password: process.env.MYSQL_PASSWORD,
       host: process.env.MYSQL_HOST,
       port: process.env.MYSQL_PORT,
-      database: process.env.MYSQL_DATABASE,
+      database: process.env.NODE_ENV === "test" ? process.env.TEST_DB : process.env.MYSQL_DATABASE,
+      test_database: process.env.TEST_DB,
     },
   },
   admin_keys: {
@@ -44,5 +45,5 @@ export default {
       api_secret: process.env.CLOUDINARY_API_SECRET,
     },
   },
-  enviroment,
+  enviroment: process.env.NODE_ENV,
 };
