@@ -13,7 +13,7 @@ describe("products", () => {
   beforeAll(async () => {
     await agent.post("/api/sessions/login").send({ username: config.admin_keys.admin_username, password: config.admin_keys.admin_pwd });
     await pool.query("SET FOREIGN_KEY_CHECKS = 0;");
-    await pool.query("TRUNCATE TABLE costumers;");
+    await pool.query("TRUNCATE TABLE products;");
     await pool.query(" SET FOREIGN_KEY_CHECKS = 1;");
     for (let product of products) {
       await agent.post(rootPath).send(product);
@@ -21,13 +21,6 @@ describe("products", () => {
   });
 
   describe("getProducts", () => {
-    beforeAll(async () => {
-      await pool.query("SET FOREIGN_KEY_CHECKS = 0;");
-      await pool.query("TRUNCATE TABLE products;");
-      await pool.query(" SET FOREIGN_KEY_CHECKS = 1;");
-      products.forEach(async (product) => await agent.post(rootPath).send(product));
-    });
-
     test("should respond with statusCode 200", async () => {
       const res = await agent.get(rootPath);
       expect(res.statusCode).toBe(200);
@@ -58,7 +51,7 @@ describe("products", () => {
       expect(res.body.payload.id).toBe(id);
     });
     test("should throw a Not Found error if the product does not exist", async () => {
-      const id = 3;
+      const id = 30;
       const res = await agent.get(`${rootPath}/${id}`);
       expect(res.statusCode).toBe(404);
       expect(res.body.name).toEqual(ERRORS.NOT_FOUND.name);
