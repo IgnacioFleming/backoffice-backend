@@ -87,11 +87,12 @@ const initializePassport = () => {
   // );
 
   passport.serializeUser((user, done) => {
+    console.log(user);
     done(null, user.id);
   });
   passport.deserializeUser(async (id, done) => {
     console.log(id, "id de deserializado");
-
+    console.log(id?.id, "id no objeto deserializado");
     if ((id?.id ?? id) === adminUser.id) return done(null, adminUser);
     const user = await UsersManager.getById(id);
     done(null, user.payload);
