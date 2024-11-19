@@ -10,7 +10,7 @@ export default class UsersManager {
 
       const [[existingUser]] = await connection.execute("SELECT id FROM users WHERE username = ?", [body.username]);
       if (existingUser) return { status: "error", error: "Username already exists." };
-      const [result] = await connection.execute("INSERT INTO users (username, password,email, first_name, last_name) VALUES (?, ?, ?, ?, ?)", [body.username, body.password, body.email, body.first_name, body.last_name]);
+      const [result] = await connection.execute("INSERT INTO users (username, password,email, first_name, last_name,is_enabled) VALUES (?, ?, ?, ?, ?,?)", [body.username, body.password, body.email, body.first_name, body.last_name, 1]);
       body.id = result.insertId;
 
       return { payload: body };
