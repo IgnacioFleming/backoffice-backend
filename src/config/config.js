@@ -42,4 +42,5 @@ export default {
       api_secret: process.env.CLOUDINARY_API_SECRET,
     },
   },
+  enviroment: process.argv[2] === "dev" ? "develop" : "production",
 };

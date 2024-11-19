@@ -30,3 +30,8 @@ export const modelMethods = {
   CREATE: "create",
   DELETE: "delete",
 };
+
+export const defaultImages = {
+  defaultCostumerImgUrl: "https://res.cloudinary.com/dah7yxmc5/image/upload/v1731957076/Business-manager/cliente-default_jdpzvx.webp",
+  defaultProductImgUrl: "https://res.cloudinary.com/dah7yxmc5/image/upload/v1731957076/Business-manager/def_product_rertc4.webp",
+};
