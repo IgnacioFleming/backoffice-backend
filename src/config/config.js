@@ -1,6 +1,9 @@
 import dotenv from "dotenv";
 
+const enviroment = process.argv[2] === "dev" ? "develop" : "production";
+
 dotenv.config();
+// dotenv.config({ path: enviroment === "develop" ? ".env.develop" : ".env" });
 
 export default {
   urls: {
@@ -42,5 +45,5 @@ export default {
       api_secret: process.env.CLOUDINARY_API_SECRET,
     },
   },
-  enviroment: process.argv[2] === "dev" ? "develop" : "production",
+  enviroment,
 };
