@@ -96,7 +96,7 @@ const initializePassport = () => {
     console.log(id?.id, "id no objeto deserializado");
     console.log((id?.id ?? id) === adminUser.id);
     if ((id?.id ?? id) === adminUser.id) return done(null, adminUser);
-    const user = await UsersManager.getById(id);
+    const user = await UsersManager.getById(id?.id ?? id);
     console.log(user, "usuario no admin");
     done(null, user.payload);
   });
