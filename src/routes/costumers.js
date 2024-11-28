@@ -1,11 +1,12 @@
 import { Router } from "express";
 import costumersController from "../controllers/costumers.js";
-import { auth } from "../middlewares/auth/auth.js";
 import { resources, uploadMiddleware } from "../middlewares/upload/uploader.js";
+import { passportCall } from "../middlewares/auth/passportCall.js";
+import { strategies } from "../config/passport.js";
 
 export const costumerRouter = Router();
 
-costumerRouter.use(auth);
+costumerRouter.use(passportCall(strategies.JWT));
 costumerRouter.get("/", costumersController.getCostumers);
 costumerRouter.post("/", uploadMiddleware(), costumersController.createCostumer);
 

@@ -3,14 +3,16 @@ import local from "passport-local";
 import { userSchema } from "../schemas/user.js";
 import { userRoles } from "../utils/roles.js";
 import UsersManager from "../dao/mysql/users.js";
-import config from "./config.js";
 import { createHash, isValidPassword } from "../utils/utils.js";
+import jwt from "passport-jwt";
+import config from "./config.js";
 
 export const strategies = {
   REGISTER: "register",
   LOGIN: "login",
   RESTORE_PASSWORD: "restore_password",
   AUTH: "auth",
+  JWT: "jwt",
 };
 const adminUser = {
   id: config.admin_keys.admin_id,
@@ -22,11 +24,14 @@ const adminUser = {
   is_enabled: true,
 };
 
+const JWTStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt;
+
 const LocalStrategy = local.Strategy;
 const initializePassport = () => {
   passport.use(
     strategies.REGISTER,
-    new LocalStrategy({ passReqToCallback: true, session: true }, async (req, username, password, done) => {
+    new LocalStrategy({ passReqToCallback: true, session: false }, async (req, username, password, done) => {
       try {
         const { body } = req;
         const user = await UsersManager.getByUsername(username);
@@ -67,33 +72,18 @@ const initializePassport = () => {
     })
   );
 
-  // passport.use(strategies.PROTECTED_URL,new LocalStrategy())
-
-  // passport.use(
-  //   "restorePass",
-  //   new JWTStrategy(
-  //     {
-  //       jwtFromRequest: ExtractJWT.fromExtractors([tokenExtractor]),
-  //       secretOrKey: config.passport.jwt_secret_key,
-  //     },
-  //     async (jwt_payload, done) => {
-  //       try {
-  //         return done(null, jwt_payload);
-  //       } catch (error) {
-  //         return done(error);
-  //       }
-  //     }
-  //   )
-  // );
-
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
-  });
-  passport.deserializeUser(async (id, done) => {
-    if ((id?.id ?? id) === adminUser.id) return done(null, adminUser);
-    const user = await UsersManager.getById(id?.id ?? id);
-    done(null, user.payload);
-  });
+  passport.use(
+    strategies.JWT,
+    new JWTStrategy({ secretOrKey: config.auth.jwt_secret_key, jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken() }, async (jwt_payload, done) => {
+      try {
+        const user = UsersManager.getById(jwt_payload.id);
+        if (!user) return done(null, false);
+        return done(null, user);
+      } catch (error) {
+        return done(error);
+      }
+    })
+  );
 };
 
 export default initializePassport;

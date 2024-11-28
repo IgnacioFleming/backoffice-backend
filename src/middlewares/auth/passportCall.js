@@ -14,9 +14,13 @@ export const passportCall = (strategy) => {
         return next(error);
       }
       req.user = user;
-      req.session.passport = { user: { id: user.id } };
-      req.isAuthenticated = () => req.session.passport.user && true;
       next();
     })(req, res, next);
   };
 };
+
+// const token = ExtractJWT.fromAuthHeaderAsBearerToken()(jwt_payload);
+//   isTokenRevoked(token, (err, revoked) => {
+//     if (revoked) return done(null, false, { message: "Invalid token" });
+//     return done(null, jwt_payload);
+//   });

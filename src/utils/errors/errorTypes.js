@@ -7,4 +7,5 @@ export const ERRORS = {
   NO_ID: { defaultMessage: "There was no Id provided", defaultStatusCode: 400, name: "no_id" },
   UPLOAD_FILE: { defaultMessage: "There was an error while uploading the file", defaultStatusCode: 400, name: "upload_file" },
   AUTH: { defaultMessage: "User or Password are not valid.", defaultStatusCode: 400, name: "auth" },
+  UNAUTHORIZED: { defaultMessage: "No permissions", defaultStatusCode: 400, name: "unauthorized" },
 };

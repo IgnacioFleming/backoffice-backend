@@ -1,8 +1,9 @@
 import { Router } from "express";
 import ordersController from "../controllers/orders.js";
-import { auth } from "../middlewares/auth/auth.js";
+import { passportCall } from "../middlewares/auth/passportCall.js";
+import { strategies } from "../config/passport.js";
 export const orderRouter = Router();
-orderRouter.use(auth);
+orderRouter.use(passportCall(strategies.JWT));
 orderRouter.get("/", ordersController.getAll);
 orderRouter.get("/:id", ordersController.getById);
 orderRouter.get("/sale_id/:sale_id", ordersController.getOrdersByOrderNumber);

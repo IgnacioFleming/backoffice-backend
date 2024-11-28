@@ -20,7 +20,7 @@ import { paymentsRouter } from "./routes/payments.js";
 
 const app = express();
 app.use(cors(corsOptions));
-app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000, httpOnly: true, sameSite: config.enviroment === "production" ? "none" : "lax", secure: config.enviroment === "production" }, resave: false, saveUninitialized: false }));
+app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000 }, resave: false, saveUninitialized: false }));
 
 app.set("trust proxy", 1);
 app.use(express.urlencoded({ extended: true }));
