@@ -40,7 +40,7 @@ const logOutUser = async (req, res, next) => {
 
 const checkSession = async (req, res, next) => {
   try {
-    const user = new UserDto(req.user);
+    const user = new UserDto(req.user.payload);
     responses.successResponse(res, user);
   } catch (error) {
     next(error);
