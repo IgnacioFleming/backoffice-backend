@@ -2,8 +2,7 @@ import dotenv from "dotenv";
 
 const enviroment = process.argv[2] === "dev" ? "develop" : "production";
 
-dotenv.config();
-// dotenv.config({ path: enviroment === "develop" ? ".env.develop" : ".env" });
+dotenv.config({ path: enviroment === "develop" ? ".env.develop" : ".env" });
 
 export default {
   urls: {
