@@ -6,7 +6,7 @@ import passport from "passport";
 
 export const sessionRouter = Router();
 
-sessionRouter.post("/register", passport.authenticate(strategies.REGISTER), sessionsController.registerUser);
+sessionRouter.post("/register", passport.authenticate(strategies.REGISTER, { session: false }), sessionsController.registerUser);
 sessionRouter.post("/login", passportCall(strategies.LOGIN), sessionsController.loginUser);
 sessionRouter.post("/logout", sessionsController.logOutUser);
 

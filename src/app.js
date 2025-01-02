@@ -20,8 +20,7 @@ app.use(cors(corsOptions));
 app.set("trust proxy", 1);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
 initializePassport();
 
 app.use("/api/products", productsRouter);

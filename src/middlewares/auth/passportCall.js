@@ -3,7 +3,7 @@ import { createCustomError } from "../../utils/errors/errorFactory.js";
 import { ERRORS } from "../../utils/errors/errorTypes.js";
 export const passportCall = (strategy) => {
   return async (req, res, next) => {
-    passport.authenticate(strategy, { session: true }, (err, user, info) => {
+    passport.authenticate(strategy, { session: false }, (err, user, info) => {
       if (err) {
         const error = createCustomError(ERRORS.UNHANDLED, err);
         return next(error);
