@@ -17,11 +17,11 @@ import { usersRouter } from "./routes/users.js";
 import { errorHandler } from "./middlewares/errors/errorHandler.js";
 import { unhandledRejection } from "./middlewares/errors/unhadledRejection.js";
 import { paymentsRouter } from "./routes/payments.js";
-import cookieParser from "cookie-parser";
+
 const app = express();
 app.use(cors(corsOptions));
-app.use(cookieParser(config.session.secret));
 app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000, httpOnly: true, sameSite: config.enviroment === "production" ? "none" : "lax", secure: config.enviroment === "production" }, resave: false, saveUninitialized: false }));
+
 app.set("trust proxy", 1);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -41,9 +41,11 @@ app.use("/api/payments", paymentsRouter);
 
 app.use(errorHandler);
 
-// process.on("uncaughtException", unhandledRejection);
-// process.on("unhandledRejection", unhandledRejection);
+process.on("uncaughtException", unhandledRejection);
+process.on("unhandledRejection", unhandledRejection);
 
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+export const server = app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+
+export default app;

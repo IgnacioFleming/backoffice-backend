@@ -35,6 +35,7 @@ const callModelAndRespond = async (res, data = {}, model, method, id) => {
 
 const costumersBodyHandler = (req) => {
   const { body } = req;
+  if (Object.keys(body) <= 0) return null;
   if (body.account_number) body.account_number = parseInt(body.account_number);
   req.fileURL && (body.logo = req.fileURL);
   req.imgPublicId && (body.logo_public_id = req.imgPublicId);
@@ -43,6 +44,7 @@ const costumersBodyHandler = (req) => {
 
 const productsBodyHandler = (req) => {
   const { body } = req;
+  if (Object.keys(body) <= 0) return null;
   body.price = Number(body.price);
   body.stock = parseInt(body.stock);
   body.cost = Number(body.cost);
@@ -53,12 +55,14 @@ const productsBodyHandler = (req) => {
 
 const paymentsBodyHandler = (req) => {
   const { body } = req;
+  if (Object.keys(body) <= 0) return null;
   const { costumer_id, payment_amount } = body;
   return { costumer_id, payment_amount: payment_amount * -1 };
 };
 
 const salesBodyHandler = (req) => {
   const { body } = req;
+  if (Object.keys(body) <= 0) return null;
   const { products } = body;
   const parsedBody = {};
   parsedBody.product_id = parseInt(products.product_id);
@@ -79,7 +83,10 @@ const getResources = async (dao, res) => {
 
 const getResourcesById = async (dao, id) => {
   try {
-    if (!id) throw createCustomError(ERRORS.NO_ID);
+    if (!id) {
+      throw createCustomError(ERRORS.NO_ID);
+    }
+
     const { payload } = await dao.getById(id);
     if (!payload) throw createCustomError(ERRORS.NOT_FOUND);
     return { payload };
