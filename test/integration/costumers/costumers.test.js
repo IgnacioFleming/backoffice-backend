@@ -40,7 +40,7 @@ describe("costumers", () => {
 
   describe("createCostumer", () => {
     const costumer = {
-      name: "create test costumer",
+      name: "create test costumer 1",
       account_number: 10,
     };
     test("should respond with status 200 and have a payload property with an id", async () => {
@@ -57,14 +57,15 @@ describe("costumers", () => {
   });
   describe("updateCostumer", () => {
     const id = 1;
-    const updateCostumer = { ...costumers[0], name: "updated name" };
     test("should respond with status 200 and have changed the property name", async () => {
+      const updateCostumer = { ...costumers[0], name: "updated name" };
       const res = await agent.put(`${rootPath}/${id}`).send(updateCostumer);
       expect(res.statusCode).toBe(200);
       expect(res.body.payload.name).toEqual(updateCostumer.name);
     });
 
     test("should throw a not found error if id does not exists", async () => {
+      const updateCostumer = { ...costumers[0], name: "updated name 2" };
       const costumersQuantity = await pool.query("SELECT COUNT(id) FROM costumers;");
       const res = await agent.put(`${rootPath}/${costumersQuantity + 1}`).send(updateCostumer);
       expect(res.statusCode).toBe(404);
