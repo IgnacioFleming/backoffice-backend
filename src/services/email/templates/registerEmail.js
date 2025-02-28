@@ -53,7 +53,7 @@ export const registerEmailTemplate = (username) => {
                             <table width="480" align="center" style="max-width: 480px; width: 100% !important; margin: 0 auto" cellpadding="0" cellspacing="0">
                               <tbody>
                                 <tr>
-                                  <td style="font: 16px/27px Helvetica, Arial, sans-serif; color: #1e1e1e">¡Hola <strong>${username}</strong>! 👋</td>
+                                  <td style="font: 16px/27px Helvetica, Arial, sans-serif; color: #1e1e1e">Hi <strong>${username}</strong>! 👋</td>
                                 </tr>
                                 <tr>
                                   <td class="m_8537046614505610192h-12" height="24" style="font-size: 1px; line-height: 1px"></td>
