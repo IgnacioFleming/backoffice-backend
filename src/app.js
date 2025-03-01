@@ -7,10 +7,7 @@ import { orderRouter } from "./routes/orders.js";
 import { saleRouter } from "./routes/sales.js";
 import { sessionRouter } from "./routes/sessions.js";
 import initializePassport from "./config/passport.js";
-import session from "express-session";
-import config from "./config/config.js";
 import passport from "passport";
-import { sessionStore } from "./config/sessionsStorage.js";
 import { balancesRouter } from "./routes/balances.js";
 import { movementsRouter } from "./routes/movements.js";
 import { usersRouter } from "./routes/users.js";
@@ -20,8 +17,6 @@ import { paymentsRouter } from "./routes/payments.js";
 
 const app = express();
 app.use(cors(corsOptions));
-app.use(session({ secret: config.session.secret, store: sessionStore, cookie: { maxAge: 24 * 3600 * 1000 }, resave: false, saveUninitialized: false }));
-
 app.set("trust proxy", 1);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

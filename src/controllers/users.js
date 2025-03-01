@@ -1,7 +1,7 @@
 import UsersManager from "../dao/mysql/users.js";
 import controllerHandlers from "../utils/controllerHandlers.js";
 
-const getAll = async (req, res) => {
+const getAll = async (req, res, next) => {
   try {
     await controllerHandlers.getResources(UsersManager, res);
   } catch (error) {
@@ -9,7 +9,7 @@ const getAll = async (req, res) => {
   }
 };
 
-const handleUserState = async (req, res) => {
+const handleUserState = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status, payload } = await UsersManager.handleUserState(id);

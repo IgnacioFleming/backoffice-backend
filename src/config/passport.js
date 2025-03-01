@@ -76,7 +76,7 @@ const initializePassport = () => {
     strategies.JWT,
     new JWTStrategy({ secretOrKey: config.auth.jwt_secret_key, jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken() }, async (jwt_payload, done) => {
       try {
-        const user = UsersManager.getById(jwt_payload.id);
+        const user = await UsersManager.getByUsername(jwt_payload.username);
         if (!user) return done(null, false);
         return done(null, user);
       } catch (error) {
