@@ -1,12 +1,13 @@
 import { Router } from "express";
 
 import productsController from "../controllers/products.js";
-import { auth } from "../middlewares/auth/auth.js";
 import { resources, uploadMiddleware } from "../middlewares/upload/uploader.js";
+import { passportCall } from "../middlewares/auth/passportCall.js";
+import { strategies } from "../config/passport.js";
 
 export const productsRouter = Router();
 
-productsRouter.use(auth);
+productsRouter.use(passportCall(strategies.JWT));
 
 productsRouter.get("/", productsController.getProducts);
 

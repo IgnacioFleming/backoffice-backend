@@ -1,7 +1,9 @@
+import config from "../config/config.js";
 import UserDto from "../dao/dto/user.js";
 import sendEmail from "../services/email/index.js";
 import { emailTemplates } from "../services/email/templates/index.js";
-import responses from "../utils/responses.js";
+import responses, { statusTypes } from "../utils/responses.js";
+import jwt from "jsonwebtoken";
 
 const registerUser = async (req, res, next) => {
   try {
@@ -19,7 +21,10 @@ const registerUser = async (req, res, next) => {
 const loginUser = async (req, res, next) => {
   try {
     const user = new UserDto(req.user);
-    responses.successResponse(res, user);
+    const token = jwt.sign({ ...user }, config.auth.jwt_secret_key, {
+      expiresIn: "1h",
+    });
+    responses.successResponse(res, { user, token });
   } catch (error) {
     next(error);
   }
@@ -27,8 +32,7 @@ const loginUser = async (req, res, next) => {
 
 const logOutUser = async (req, res, next) => {
   try {
-    req.session.destroy();
-    responses.successResponse(res, "Logged out.");
+    responses.successResponse(res, { status: statusTypes.SUCCESS, payload: "Logged out" });
   } catch (error) {
     next(error);
   }

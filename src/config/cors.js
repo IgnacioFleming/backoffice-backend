@@ -11,5 +11,4 @@ export const corsOptions = {
   },
   methods: ["GET", "POST", "PUT", "DELETE", "HEAD"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
 };

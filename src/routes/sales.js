@@ -1,8 +1,9 @@
 import { Router } from "express";
 import salesController from "../controllers/sales.js";
-import { auth } from "../middlewares/auth/auth.js";
+import { passportCall } from "../middlewares/auth/passportCall.js";
+import { strategies } from "../config/passport.js";
 export const saleRouter = Router();
-saleRouter.use(auth);
+saleRouter.use(passportCall(strategies.JWT));
 saleRouter.get("/", salesController.getAll);
 saleRouter.post("/", salesController.create);
 saleRouter.delete("/:id", salesController.deleteSale);
