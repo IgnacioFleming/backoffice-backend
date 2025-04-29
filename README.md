@@ -42,8 +42,8 @@ Welcome to the **Business Manager API**, the backend service for managing produc
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/IgnacioFleming/business-manager-backend.git
-cd business-manager-backend
+git clone https://github.com/IgnacioFleming/backoffice-backend.git
+cd business-backend
 ```
 
 2. **Install dependencies:**
@@ -52,7 +52,7 @@ cd business-manager-backend
 npm install
 ```
 
-3. **Create a `.env` file** based on `.env.develop`, and set your environment variables (MySQL database credentials, Cloudinary keys, JWT secret, etc.).
+3. Create a `.env.develop` and `.env` , and set your environment variables (MySQL database credentials, Cloudinary keys, JWT secret, etc.).
 
 4. **Run the server in development mode:**
 
@@ -60,7 +60,7 @@ npm install
 npm run dev
 ```
 
-Server will start on `http://localhost:3000` by default.
+Server will start on `http://localhost:5173` by default.
 
 ## 📂 Project Structure
 
