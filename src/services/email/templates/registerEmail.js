@@ -39,7 +39,7 @@ export const registerEmailTemplate = (username) => {
                             <table width="480" align="center" style="max-width: 480px; width: 100% !important; margin: 0 auto" cellpadding="0" cellspacing="0">
                               <tbody>
                                 <tr>
-                                  <td><h1 class="m_8537046614505610192fs-28 m_8537046614505610192lh-34" style="font: 700 42px/51px Helvetica, Arial, sans-serif, WFVisualSans; color: #000; letter-spacing: -0.6px; font-family: WF Visual Sans, Arial, Helvetica, sans-serif !important; margin: 0 !important">Bienvenido a Business Manager!</h1></td>
+                                  <td><h1 class="m_8537046614505610192fs-28 m_8537046614505610192lh-34" style="font: 700 42px/51px Helvetica, Arial, sans-serif, WFVisualSans; color: #000; letter-spacing: -0.6px; font-family: WF Visual Sans, Arial, Helvetica, sans-serif !important; margin: 0 !important">Wellcome to Business Manager!</h1></td>
                                 </tr>
                               </tbody>
                             </table>
@@ -59,7 +59,7 @@ export const registerEmailTemplate = (username) => {
                                   <td class="m_8537046614505610192h-12" height="24" style="font-size: 1px; line-height: 1px"></td>
                                 </tr>
                                 <tr>
-                                  <td style="font: 16px/27px Helvetica, Arial, sans-serif; color: #1e1e1e">Nos alegra darte la bienvenida a <strong>Business Manager</strong>. Tu cuenta ha sido creada con éxito y ya puedes comenzar a disfrutar de todas nuestras funcionalidades.</td>
+                                  <td style="font: 16px/27px Helvetica, Arial, sans-serif; color: #1e1e1e">We are pleased to welcome you to <strong>Business Manager</strong>. Your account has been successfully created and you can now start enjoying all our features.</td>
                                 </tr>
                               </tbody>
                             </table>
@@ -73,14 +73,14 @@ export const registerEmailTemplate = (username) => {
                             <table width="480" align="center" style="max-width: 480px; width: 100% !important; margin: 0 auto" cellpadding="0" cellspacing="0">
                               <tbody>
                                 <tr>
-                                  <td><h3 class="m_8537046614505610192fs-19 m_8537046614505610192lh-27" style="font: 700 22px/30px Helvetica, Arial, sans-serif, WFVisualSans; color: #000; letter-spacing: -0.25px; font-family: WF Visual Sans, Arial, Helvetica, sans-serif !important; margin: 0 !important">¿Qué puedes hacer a continuación?</h3></td>
+                                  <td><h3 class="m_8537046614505610192fs-19 m_8537046614505610192lh-27" style="font: 700 22px/30px Helvetica, Arial, sans-serif, WFVisualSans; color: #000; letter-spacing: -0.25px; font-family: WF Visual Sans, Arial, Helvetica, sans-serif !important; margin: 0 !important">What can you do next?</h3></td>
                                 </tr>
                                 <tr>
                                   <td>
                                     <ul style="font: 16px/27px Helvetica, Arial, sans-serif; color: #1e1e1e">
-                                      <li><strong>Explora tu panel de control</strong>: Administra tus productos,clientes y órdenes de forma sencilla.</li>
-                                      <li><strong>Configura tu perfil</strong>: Personaliza tu experiencia completando tu información.</li>
-                                      <li><strong>Consulta nuestro soporte</strong>: Estamos a un clic de distancia para ayudarte con lo que necesites.</li>
+                                      <li><strong>Explore your dashboard</strong>: Manage your products, customers, and orders easily.</li>
+                                      <li><strong>Set up your profile</strong>: Personalize your experience by filling out your information.</li>
+                                      <li><strong>Check out our support</strong>:We're just a click away to help you with whatever you need.</li>
                                     </ul>
                                   </td>
                                 </tr>
@@ -96,7 +96,7 @@ export const registerEmailTemplate = (username) => {
                             <table width="480" align="center" style="max-width: 480px; width: 100% !important; margin: 0 auto" cellpadding="0" cellspacing="0">
                               <tbody>
                                 <tr>
-                                  <td style="font: 16px/27px Helvetica, Arial, sans-serif; color: #1e1e1e">Nos encantaría acompañarte en esta nueva etapa, y estamos aquí para asegurarnos de que aproveches al máximo lo que ofrecemos.</td>
+                                  <td style="font: 16px/27px Helvetica, Arial, sans-serif; color: #1e1e1e">We'd love to be with you on this next journey, and we're here to make sure you get the most out of what we have to offer.</td>
                                 </tr>
                               </tbody>
                             </table>
@@ -110,7 +110,7 @@ export const registerEmailTemplate = (username) => {
                             <table width="480" align="center" style="max-width: 480px; width: 100% !important; margin: 0 auto" cellpadding="0" cellspacing="0">
                               <tbody>
                                 <tr>
-                                  <td style="font: 16px/27px Helvetica, Arial, sans-serif; color: #1e1e1e">Si tienes cualquier pregunta, no dudes en responder a este correo o contactarnos a través de <a href="mailto:soporte@ejemplo.com" style="color: #3498db">soporte@ejemplo.com</a>.</td>
+                                  <td style="font: 16px/27px Helvetica, Arial, sans-serif; color: #1e1e1e">If you have any questions, feel free to reply to this email or contact us at <a href="mailto:soporte@ejemplo.com" style="color: #3498db">support@example.com</a>.</td>
                                 </tr>
                               </tbody>
                             </table>
@@ -124,7 +124,7 @@ export const registerEmailTemplate = (username) => {
                             <table width="480" align="center" style="max-width: 480px; width: 100% !important; margin: 0 auto" cellpadding="0" cellspacing="0">
                               <tbody>
                                 <tr>
-                                  <td style="font: 16px/27px Helvetica, Arial, sans-serif; color: #1e1e1e">¡Gracias por confiar en nosotros y bienvenido a la familia de <strong>Business Manager</strong>!</td>
+                                  <td style="font: 16px/27px Helvetica, Arial, sans-serif; color: #1e1e1e">Thank you for trusting us and welcome to the <strong>Business Manager</strong> family!</td>
                                 </tr>
                               </tbody>
                             </table>
@@ -143,7 +143,7 @@ export const registerEmailTemplate = (username) => {
                                       <tbody>
                                         <tr class="m_8537046614505610192active-t">
                                           <td align="center" style="background: #1871f5; font: 700 15px/19px Arial, Helvetica, sans-serif, WFVisualSans; border-radius: 4px; overflow: hidden; font-family: WF Visual Sans, Arial, Helvetica, sans-serif !important">
-                                            <a style="outline: none; color: #fff; text-decoration: none; display: block; padding: 16px 24px" href="" target="_blank">Iniciar Sesión en Business Manager</a>
+                                            <a style="outline: none; color: #fff; text-decoration: none; display: block; padding: 16px 24px" href="" target="_blank">Login to Business Manager</a>
                                           </td>
                                         </tr>
                                       </tbody>
