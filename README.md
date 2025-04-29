@@ -60,7 +60,7 @@ npm install
 npm run dev
 ```
 
-Server will start on `http://localhost:5173` by default.
+Server will start on `http://localhost:8080` by default.
 
 ## 📂 Project Structure
 
