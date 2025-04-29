@@ -68,9 +68,12 @@ Server will start on `http://localhost:8080` by default.
 src/
 ├── config/          # Database, Passport, Cloudinary configurations
 ├── controllers/     # Business logic for each entity
+├── dao/             # Database models
 ├── middlewares/     # Custom Express middlewares
-├── models/          # Database models
+├── mocks/           # Mocked data generation for tests
 ├── routes/          # API routes
+├── schemas/         # For data validation with Zod
+├── services/        # Email sender functions
 ├── utils/           # Utility functions
 └── app.js           # Main application entry point
 ```
