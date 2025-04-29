@@ -75,9 +75,10 @@ const initializePassport = () => {
     strategies.JWT,
     new JWTStrategy({ secretOrKey: config.auth.jwt_secret_key, jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken() }, async (jwt_payload, done) => {
       try {
-        const user = await UsersManager.getByUsername(jwt_payload.username);
-        if (!user) return done(null, false);
-        return done(null, user);
+        if (jwt_payload.username === adminUser.username) return done(null, adminUser);
+        const { payload, error } = await UsersManager.getByUsername(jwt_payload.username);
+        if (error) return done(null, false);
+        return done(null, payload);
       } catch (error) {
         return done(error);
       }
@@ -88,6 +89,7 @@ const initializePassport = () => {
     done(null, user.id);
   });
   passport.deserializeUser(async (id, done) => {
+    if (id === adminUser.id) return done(null, adminUser);
     const user = await UsersManager.getById(id);
     done(null, user.payload);
   });
