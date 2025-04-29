@@ -77,15 +77,16 @@ src/
 
 ## 🛡️ API Endpoints Overview
 
-Method | Endpoint | Description
-POST | /api/login | User login
-POST | /api/register | Register new admin
-GET | /api/products | Get all products
-POST | /api/products | Create a new product
-GET | /api/clients | Get all clients
-POST | /api/clients | Create a new client
-GET | /api/sales | Get all sales
-POST | /api/sales | Register a new sale
+| Method |    Endpoint     |     Description      |
+| :----: | :-------------: | :------------------: |
+|  POST  |  `/api/login`   |      User login      |
+|  POST  | `/api/register` |  Register new admin  |
+|  GET   | `/api/products` |   Get all products   |
+|  POST  | `/api/products` | Create a new product |
+|  GET   | `/api/clients`  |   Get all clients    |
+|  POST  | `/api/clients`  | Create a new client  |
+|  GET   |  `/api/sales`   |    Get all sales     |
+|  POST  |  `/api/sales`   | Register a new sale  |
 
 (Authentication required for most routes)
 
