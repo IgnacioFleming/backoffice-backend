@@ -7,10 +7,6 @@ import { orderRouter } from "./routes/orders.js";
 import { saleRouter } from "./routes/sales.js";
 import { sessionRouter } from "./routes/sessions.js";
 import initializePassport from "./config/passport.js";
-<<<<<<< HEAD
-=======
-import passport from "passport";
->>>>>>> develop
 import { balancesRouter } from "./routes/balances.js";
 import { movementsRouter } from "./routes/movements.js";
 import { usersRouter } from "./routes/users.js";

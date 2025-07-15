@@ -8,8 +8,4 @@ export const connectionOptions = {
   password: config.db.mysql.password,
   port: config.db.mysql.port,
 };
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
 export const pool = mysql.createPool(connectionOptions);

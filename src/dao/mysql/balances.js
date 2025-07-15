@@ -22,10 +22,6 @@ export default class BalancesManager {
   static async addDebitCredit(costumer_id, amount, connection) {
     const dbClient = connection || pool;
     try {
-<<<<<<< HEAD
-=======
-      console.log(costumer_id, amount);
->>>>>>> develop
       const [newCredit] = await dbClient.execute("UPDATE balances SET balance_amount = balance_amount + ? WHERE costumer_id = ?", [amount, costumer_id]);
       return { payload: newCredit };
     } catch (error) {
