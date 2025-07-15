@@ -8,7 +8,6 @@ export const passportCall = (strategy) => {
         const error = createCustomError(ERRORS.UNHANDLED, err);
         return next(error);
       }
-
       if (!user) {
         const error = createCustomError(ERRORS.AUTH, info?.message);
         return next(error);
