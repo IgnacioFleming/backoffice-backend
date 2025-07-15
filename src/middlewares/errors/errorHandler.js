@@ -13,7 +13,7 @@ export const errorHandler = (err, req, res, next) => {
       console.log("DATABASE ERROR: ", message);
       message = "There was an error in the database.";
     }
-    if (err.name === ERRORS.AUTH.name) return res.status(401).json({ status: statusTypes.UNAUTHORIZED, redirectURL: "/login", message: err.message });
+    if (err.name === ERRORS.AUTH.name) return res.status(401).json({ status: statusTypes.UNAUTHORIZED, redirectURL: "/demo-login", message: err.message });
     res.status(err.statusCode).json({ status: statusTypes.ERROR, name: err.name, message });
   } else {
     console.log("Unhandled error", err);
