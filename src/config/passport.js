@@ -13,6 +13,7 @@ export const strategies = {
   RESTORE_PASSWORD: "restore_password",
   AUTH: "auth",
   JWT: "jwt",
+  DEMO_LOGIN: "demo_login",
 };
 const adminUser = {
   id: config.admin_keys.admin_id,
@@ -65,6 +66,16 @@ const initializePassport = () => {
         if (!validation) return done(null, false, { message: "Invalid password." });
         if (user.payload.is_enabled !== 1) return done(null, false, { message: "This User is not enabled yet." });
         return done(null, user.payload);
+      } catch (error) {
+        done(error);
+      }
+    })
+  );
+  passport.use(
+    strategies.DEMO_LOGIN,
+    new LocalStrategy(async (username, password, done) => {
+      try {
+        return done(null, adminUser);
       } catch (error) {
         done(error);
       }

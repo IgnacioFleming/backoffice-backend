@@ -29,6 +29,17 @@ const loginUser = async (req, res, next) => {
     next(error);
   }
 };
+const demoLoginUser = async (req, res, next) => {
+  try {
+    const user = new UserDto(req.user);
+    const token = jwt.sign({ ...user }, config.auth.jwt_secret_key, {
+      expiresIn: "1h",
+    });
+    responses.successResponse(res, { user, token });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const logOutUser = async (req, res, next) => {
   try {
@@ -52,4 +63,5 @@ export default {
   loginUser,
   logOutUser,
   checkSession,
+  demoLoginUser,
 };

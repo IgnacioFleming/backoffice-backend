@@ -8,6 +8,7 @@ export const sessionRouter = Router();
 
 sessionRouter.post("/register", passport.authenticate(strategies.REGISTER, { session: false }), sessionsController.registerUser);
 sessionRouter.post("/login", passportCall(strategies.LOGIN), sessionsController.loginUser);
+sessionRouter.post("/demo-login", passportCall(strategies.DEMO_LOGIN), sessionsController.demoLoginUser);
 sessionRouter.post("/logout", sessionsController.logOutUser);
 
 sessionRouter.get("/protected", passportCall(strategies.JWT), (req, res) => {
