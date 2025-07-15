@@ -29,8 +29,6 @@ const loginUser = async (req, res, next) => {
     next(error);
   }
 };
-<<<<<<< HEAD
-=======
 const demoLoginUser = async (req, res, next) => {
   try {
     const user = new UserDto(req.user);
@@ -42,7 +40,6 @@ const demoLoginUser = async (req, res, next) => {
     next(error);
   }
 };
->>>>>>> develop
 
 const logOutUser = async (req, res, next) => {
   try {
@@ -66,8 +63,5 @@ export default {
   loginUser,
   logOutUser,
   checkSession,
-<<<<<<< HEAD
-=======
   demoLoginUser,
->>>>>>> develop
 };

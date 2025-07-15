@@ -13,10 +13,7 @@ export const strategies = {
   RESTORE_PASSWORD: "restore_password",
   AUTH: "auth",
   JWT: "jwt",
-<<<<<<< HEAD
-=======
   DEMO_LOGIN: "demo_login",
->>>>>>> develop
 };
 const adminUser = {
   id: config.admin_keys.admin_id,
@@ -74,8 +71,6 @@ const initializePassport = () => {
       }
     })
   );
-<<<<<<< HEAD
-=======
   passport.use(
     strategies.DEMO_LOGIN,
     new LocalStrategy(async (username, password, done) => {
@@ -86,7 +81,6 @@ const initializePassport = () => {
       }
     })
   );
->>>>>>> develop
 
   passport.use(
     strategies.JWT,
